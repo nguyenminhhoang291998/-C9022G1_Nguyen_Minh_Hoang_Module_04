@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/product")
 public class ProductController {
     @Autowired
-    IProductService productService;
+    private IProductService productService;
 
     @GetMapping("")
     public String showList(Model model) {
@@ -56,8 +56,8 @@ public class ProductController {
     }
 
     @PostMapping("/remove")
-    public String remove(Product product, RedirectAttributes redirect) {
-        boolean check = productService.remove(product.getId());
+    public String remove(int deleteName, RedirectAttributes redirect) {
+        boolean check = productService.remove(deleteName);
         String mess = "Xóa thành công";
         if (!check) {
             mess = "Xóa thất bại";
