@@ -36,7 +36,7 @@
     <tr th:each="product : ${products}">
         <td th:text="${product.getName()}"></td>
         <td th:text="${product.getPrice()}"></td>
-        <td th:text="${product.getDescribe()}"></td>
+        <td th:text="${product.getDescribes()}"></td>
         <td th:text="${product.getProducer()}"></td>
         <td><a th:href="@{/product/edit(id=${product.getId()})}">
             <button class="btn btn-primary">Edit</button>

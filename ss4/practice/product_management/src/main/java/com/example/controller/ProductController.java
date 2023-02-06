@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/product")
 public class ProductController {
@@ -28,7 +30,6 @@ public class ProductController {
 
     @PostMapping("/save")
     public String save(Product product, RedirectAttributes redirect) {
-        product.setId((int) (Math.random() * 10000));
         boolean check = productService.save(product);
         String mess = "Thêm mới thành công";
         if (!check) {
@@ -66,15 +67,15 @@ public class ProductController {
         return "redirect:/product";
     }
 
-    @GetMapping("/delete{id}")
-    public String delete(@RequestParam int id, Model model) {
-        model.addAttribute("product", productService.findById(id));
-        return "/delete";
-    }
-
     @PostMapping("/search")
     public String search(@RequestParam String searchInfor, Model model) {
-        model.addAttribute("products", productService.findByName(searchInfor));
+        List<Product> products = productService.findByName(searchInfor);
+        String mess = "";
+        if (products.isEmpty()){
+            mess = "Danh sách trống";
+        }
+        model.addAttribute("mess", mess);
+        model.addAttribute("products", products);
         return "/home";
     }
 }
