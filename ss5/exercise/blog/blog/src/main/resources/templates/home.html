@@ -4,17 +4,22 @@
 </head>
 <body style="background-color: #e5e9f5">
 <div class="row m-3">
-    <div class="col-md-2" th:object="${bl}">
-        <select th:field="*{category}" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-            <option value="">Category</option>
-            <option th:each="cate : ${categoryList}" th:value="${cate.id}" th:text="${cate.name}"></option>
-        </select>
+    <div class="dropdown">
+        <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Category
+        </button>
+        <ul class="dropdown-menu">
+            <li><a th:each="cate : ${categoryList}" th:text="${cate.name}" class="dropdown-item" th:href="@{/group(categoryId=${cate.id})}"></a></li>
+        </ul>
     </div>
+
     <div class="col-md-2">
-        <a href="/category/"><button class="btn btn-primary">Category management</button></a>
+        <a href="/category/">
+            <button class="btn btn-primary">Category management</button>
+        </a>
     </div>
     <div class="col-md-5">
-        <h1 style=" color: #1b3d7a ">
+        <h1 style="color: #1b3d7a; margin-top: -10px;margin-right: 100px">
             Blog
         </h1>
     </div>
@@ -36,7 +41,11 @@
         <th scope="col">#</th>
         <th scope="col">Summary</th>
         <th scope="col">Category</th>
-        <th scope="col">Create Day<form action="/"><button class="btn btn-warning"><input name="sortName" value="createdDay" hidden>Sort</button></form></th>
+        <th scope="col">Create Day
+            <form action="/">
+                <button class="btn btn-warning"><input name="sortName" value="createdDay" hidden>Sort</button>
+            </form>
+        </th>
         <th scope="col">Detail</th>
         <th scope="col">Edit</th>
         <th scope="col">Delete</th>
@@ -86,7 +95,7 @@
                 <div class="modal-body">
                     <textarea th:field="*{content}" id="contentIdEdit"></textarea>
                     <input id="idEdit" th:field="*{id}" hidden>
-<!--                    <input id="categoryIdEdit" th:field="*{category}" hidden>-->
+                    <!--                    <input id="categoryIdEdit" th:field="*{category}" hidden>-->
                     <input id="createDayEdit" th:field="*{createdDay}" hidden>
                 </div>
                 <div class="modal-footer">
@@ -144,9 +153,15 @@
             </button>
         </div>
         <div class="col-md-3">
-            <a th:href="@{/(page=${blogList.number - 1},searchInfor=${searchInfor})}" th:onchange="" th:if="${blogList.hasPrevious()}" class="previous"><button class="btn btn-primary">&laquo; Previous</button></a>
+            <a th:href="@{/(page=${blogList.number - 1},searchInfor=${searchInfor})}" th:onchange=""
+               th:if="${blogList.hasPrevious()}" class="previous">
+                <button class="btn btn-primary">&laquo; Previous</button>
+            </a>
             <span th:text="${blogList.number + 1}"></span>/<span th:text="${blogList.totalPages}"></span>
-            <a th:href="@{/(page=${blogList.number + 1},searchInfor=${searchInfor})}" th:if="${blogList.hasNext()}" class="next"><button class="btn btn-primary">Next &raquo;</button></a>
+            <a th:href="@{/(page=${blogList.number + 1},searchInfor=${searchInfor})}" th:if="${blogList.hasNext()}"
+               class="next">
+                <button class="btn btn-primary">Next &raquo;</button>
+            </a>
         </div>
     </div>
 
@@ -165,7 +180,8 @@
                     <textarea th:field="*{content}" placeholder="Enter content"></textarea>
                 </div>
                 <div>
-                    <select th:field="*{category}" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                    <select th:field="*{category}" class="form-select form-select-lg mb-3"
+                            aria-label=".form-select-lg example">
                         <option value="">Category</option>
                         <option th:each="cate : ${categoryList}" th:value="${cate.id}" th:text="${cate.name}"></option>
                     </select>

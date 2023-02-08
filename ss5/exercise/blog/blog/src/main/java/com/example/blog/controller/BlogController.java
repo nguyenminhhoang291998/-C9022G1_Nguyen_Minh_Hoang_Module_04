@@ -30,11 +30,25 @@ public class BlogController {
 
     @GetMapping("")
     public String showList(Model model,@RequestParam(required = false,defaultValue = "") String searchInfor
-    ,@RequestParam(required = false,defaultValue = "0") int page,@RequestParam(required = false,defaultValue ="id") String sortName){
+    ,@RequestParam(required = false,defaultValue = "0") int page,
+                           @RequestParam(required = false,defaultValue ="id") String sortName){
         Pageable pageable = PageRequest.of(page,5, Sort.by(sortName).ascending());
         Page<Blog> blogPage = blogService.search(searchInfor,pageable);
         model.addAttribute("blogList",blogPage);
         model.addAttribute("searchInfor",searchInfor);
+        model.addAttribute("bl", new Blog());
+        model.addAttribute("categoryList", categoryService.findAll());
+        return "/home";
+    }
+
+    @GetMapping("group")
+    public String group(Model model,@RequestParam(required = false) int categoryId
+    ,@RequestParam(required = false,defaultValue = "0") int page,
+                           @RequestParam(required = false,defaultValue ="id") String sortName){
+        Pageable pageable = PageRequest.of(page,5, Sort.by(sortName).ascending());
+        Page<Blog> blogPage = blogService.findByCategory_Id(categoryId,pageable);
+        model.addAttribute("blogList",blogPage);
+        model.addAttribute("categoryId",categoryId);
         model.addAttribute("bl", new Blog());
         model.addAttribute("categoryList", categoryService.findAll());
         return "/home";
