@@ -11,11 +11,11 @@ public class MusicDto implements Validator {
     private int id;
     @NotEmpty(message ="Tên bài hát không được để trống")
     @Size(max = 800,message = "Không vượt quá 800 ký tự")
-    @Pattern(regexp = "^[\\w|\\s]+$",message = "Tên bài hát không chứa các kí tự đặc biệt.")
+    @Pattern(regexp = "^([\\p{L}\\s])+$",message = "Tên bài hát không chứa các kí tự đặc biệt.")
     private String name;
     @NotEmpty(message ="Không được để trống")
     @Size(max = 300,message = "Không vượt quá 300 ký tự")
-    @Pattern(regexp = "^[\\w|\\s]+$",message = "Tên ca sĩ không chứa các kí tự đặc biệt.")
+    @Pattern(regexp = "^([\\p{L}\\s])+$",message = "Tên ca sĩ không chứa các kí tự đặc biệt.")
     private String singer;
     @NotEmpty(message ="Không được để trống")
     @Size(max = 1000,message = "Không vượt quá 1000 ký tự")
@@ -72,7 +72,7 @@ public class MusicDto implements Validator {
     public void validate(Object target, Errors errors) {
         MusicDto musicDto = (MusicDto) target;
         String category = musicDto.getCategory();
-        if(!category.matches("^[\\w|,]+$")){
+        if(!category.matches("^([\\p{L}\\s,])+$")){
             errors.rejectValue("category","ErrorCategory");
         }
     }

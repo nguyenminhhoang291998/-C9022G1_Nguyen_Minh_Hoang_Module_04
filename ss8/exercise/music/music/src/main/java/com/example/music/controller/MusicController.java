@@ -34,7 +34,7 @@ public class MusicController {
             model.addAttribute("musicList",musicService.findAll());
             model.addAttribute("musicDto",musicDto);
             model.addAttribute("hasError", "true");
-            return "/home";
+            return "home";
         }
         Music music = new Music();
         BeanUtils.copyProperties(musicDto,music);
