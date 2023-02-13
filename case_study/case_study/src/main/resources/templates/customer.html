@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}">
+</head>
+<body>
+<div th:replace="~{layout :: navbar}"></div>
+<div class="row m-3">
+    <div class="col-md-8">
+        <h2>Customer</h2>
+    </div>
+    <div class="col-md-4">
+        <form class="d-flex justify-content-center" role="search">
+            <input class="form-control" style="margin-left: 1%" type="search" th:value="${nameSearch}" name="nameSearch" placeholder="Name" aria-label="Search">
+            <input class="form-control" style="margin-left: 1%" type="search" th:value="${emailSearch}" name="emailSearch" placeholder="Email" aria-label="Search">
+            <select type="number"  class="form-control"  style="margin-left: 1%;width: 140%" name="typeIdSearch">
+                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}"
+                        th:text="${customerType.name}" th:if="${typeIdSearch == customerType.id }"></option>
+                <option value="0">Customer Type</option>
+                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}"
+                        th:text="${customerType.name}" th:if="${typeIdSearch != customerType.id }"></option>
+            </select>
+            <button class="btn btn-warning btn-outline-success search"  style="margin-left: 1%" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+
+<h3 class="message" th:text="${mess}"></h3>
+
+<div class="table-list">
+    <div class="table-responsive">
+        <table class="table table-striped w-100" id="tableCustomer">
+            <thead style="vertical-align: top; text-align: center">
+            <tr>
+                <th scope="col">ID</th>
+                <!--                <th scope="col" class="text-center">Customer Type ID</th>-->
+                <th scope="col">Name</th>
+                <th scope="col">Day Of Birth</th>
+                <th scope="col">Gender</th>
+                <!--               <th scope="col" class="text-center">ID card</th>-->
+                <th scope="col">Phone Number</th>
+                <th scope="col">Email</th>
+                <th scope="col">Address</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer,status : ${customerPage}">
+                <td th:text="${customer.id}"></td>
+                <!--                    <td>${customer.customerTypeId}</td>-->
+                <td th:text="${customer.name}"></td>
+                <td th:text="${customer.dayOfBirth}"></td>
+                <td><span th:if="${!customer.gender}">Nữ</span>
+                    <span th:if="${customer.gender}">Nam</span></td>
+                <!--                    <td>${customer.idCard}</td>-->
+                <td th:text="${customer.phoneNumber}"></td>
+                <td th:text="${customer.email}"></td>
+                <td th:text="${customer.address}"></td>
+                <td>
+                    <button th:attr=" onclick=|infoEdit('${customer.id}','${customer.customerType}','${customer.name}','${customer.dayOfBirth}',
+                                '${customer.gender}','${customer.idCard}','${customer.phoneNumber}','${customer.email}','${customer.address}','${customer.flag}')|"
+                            type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#editModal">Edit
+                    </button>
+                </td>
+                <td>
+                    <button th:attr="onclick=|infoDelete('${customer.id}','${customer.name}')|" type="button"
+                            class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal">Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="margin-left: 44%">
+    <div class="row">
+        <div class="col-md-9">
+            <button type="button"
+                    class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">
+                Add new Customer
+            </button>
+        </div>
+
+        <div class="col-md-3">
+            <a  th:href="@{/customer/(page=${customerPage.number - 1},nameSearch=${nameSearch},emailSearch=${emailSearch},
+            typeIdSearch=${typeIdSearch})}" th:if="${customerPage.hasPrevious()}" class="previous">
+                <button class="btn btn-primary" th:attr="onmouseover=|infoPre('${customerPage.number}')|" id="btnPre" >&laquo;</button>
+<!--                <button class="btn btn-primary" th:attr="onmouseover=|infoPre('${customerPage.number}')|" id="btnPre" >&laquo; Previous</button>-->
+            </a>
+            <span th:text="${customerPage.number + 1}"></span>/<span th:text="${customerPage.totalPages}"></span>
+            <a th:href="@{/customer/(page=${customerPage.number + 1},nameSearch=${nameSearch},emailSearch=${emailSearch},
+            typeIdSearch=${typeIdSearch})}" th:if="${customerPage.hasNext()}" class="next">
+                <button class="btn btn-primary">&raquo;</button>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<!--Modal add-->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">Add Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body m-0 p-0">
+
+                <form class="form-horizontal" action="/customer/save" method="post" th:object="${ctm}">
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="newCustomerTypeId">Customer Type:</label></div>
+                        <div class="col-sm-8">
+                            <select type="number" class="form-control" id="newCustomerTypeId" th:field="*{customerType.id}" >
+                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="newName">Name:</label></div>
+                        <div class="col-sm-8">
+                            <input required pattern="^[A-Z][a-z]*(\s[A-Z][a-z]*)+$" title="Tên chưa đúng định dạng"
+                                   type="text" class="form-control" id="newName" th:field="*{name}"
+                                   placeholder="Enter name">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="newDayOfBirth">Day Of
+                            Birth:</label></div>
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control" id="newDayOfBirth" th:field="*{dayOfBirth}"
+                                   placeholder="Enter day of birth">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label">Gender:</label></div>
+                        <div class="col-sm-8">
+                            <label for="gender1"><input class="ms-3 me-1" checked type="radio" th:field="*{gender}"
+                                                        id="gender1" th:value='true'>Nam</label>
+                            <label for="gender2"><input class="ms-3 me-1" type="radio" th:field="*{gender}" id="gender2"
+                                                        th:value='false'>Nữ</label>
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="newIdCard">ID card:</label></div>
+                        <div class="col-sm-8">
+                            <input required pattern="^\d{9}(\d{3})?$" title="Số CMND chưa đúng định dạng" type="number"
+                                   class="form-control"
+                                   th:field="*{idCard}" id="newIdCard" placeholder="Enter ID card">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="newPhoneNumber">Phone
+                            number:</label></div>
+                        <div class="col-sm-8">
+                            <input required pattern="^([(]84[)][+])?09[0-1]\d{7}$"
+                                   title="Số điện thoại chưa đúng định dạng" type="number" maxlength="10" minlength="9"
+                                   class="form-control"
+                                   th:field="*{phoneNumber}" id="newPhoneNumber" placeholder="Enter phone number">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="newEmail">Email:</label></div>
+                        <div class="col-sm-8">
+                            <input required pattern="^[a-zA-Z0-9]+@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)+$"
+                                   title="Email chưa đúng định dạng"
+                                   type="email" class="form-control" id="newEmail" th:field="*{email}"
+                                   placeholder="Enter email">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="newAddress">Address:</label></div>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="newAddress" th:field="*{address}"
+                                   placeholder="Enter address">
+                        </div>
+                    </div>
+                    <div class="form-group m-2">
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal edit-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body m-0 p-0">
+                <form class="form-horizontal" action="/customer/update" method="post" th:object="${ctm}">
+
+                    <input type="number" class="form-control" id="editId" th:field="*{id}" hidden>
+                    <span class="form-control" id="editFlag" th:field="*{flag}" hidden></span>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="editCustomerTypeId">Customer Type:</label></div>
+                        <div class="col-sm-8">
+                            <select type="number" class="form-control" id="editCustomerTypeId" th:field="*{customerType.id}">
+
+<!--                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"-->
+<!--                                        th:if="${customerType.id == }"></option>-->
+                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="editName">Name:</label></div>
+                        <div class="col-sm-8">
+                            <input required pattern="^[A-Z][a-z]*(\s[A-Z][a-z]*)+$" title="Tên chưa đúng định dạng"
+                                   type="text" class="form-control" id="editName" th:field="*{name}">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="editDayOfBirth">Day Of
+                            Birth:</label></div>
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control" id="editDayOfBirth" th:field="*{dayOfBirth}">
+                        </div>
+                    </div>
+
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label">Gender:</label></div>
+                        <div class="col-sm-8">
+                            <label for="male"><input class="ms-3 me-1" type="radio" th:field="*{gender}" id="male" th:value='true' th:text="Nam"></label>
+                            <label for="female"><input class="ms-3 me-1" type="radio" th:field="*{gender}" id="female"  th:value="false" th:text="Nữ"></label>
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="editIdCard">ID card:</label></div>
+                        <div class="col-sm-8">
+                            <input required pattern="^\d{9}(\d{3})?$" title="Số CMND chưa đúng định dạng" type="number"
+                                   minlength="9" maxlength="12" class="form-control" th:field="*{idCard}" id="editIdCard">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="editPhoneNumber">Phone
+                            number:</label></div>
+                        <div class="col-sm-8">
+                            <input required pattern="^([(]84[)][+])?09[0-1]\d{7}$"
+                                   title="Số điện thoại chưa đúng định dạng" type="number" maxlength="10" minlength="9"
+                                   class="form-control" th:field="*{phoneNumber}" id="editPhoneNumber">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="editEmail">Email:</label></div>
+                        <div class="col-sm-8">
+                            <input required pattern="^[a-zA-Z0-9]+@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)+$"
+                                   title="Email chưa đúng định dạng" type="email" class="form-control" id="editEmail"
+                                   th:field="*{email}">
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4"><label class="control-label" for="editAddress">Address:</label></div>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="editAddress" th:field="*{address}">
+                        </div>
+                    </div>
+                    <div class="form-group m-2">
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal delete-->
+<div class="modal fade" id="deleteModal" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete customer</h5>
+            </div>
+            <form action="/customer/delete" method="post">
+                <div class="modal-body">
+                    <input id="deleteId" name="deleteId" hidden>
+                    <span>Are you sure you want to delete customer </span>
+                    <span id="deleteName"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // function infoPre(numberPage){
+    //     document.getElementById("btnPre").disabled = (numberPage < 1);
+    // }
+    function infoDelete(id, name) {
+        document.getElementById("deleteId").value = id;
+        document.getElementById("deleteName").innerText = name;
+    }
+
+    function infoEdit(id, customerTypeId, name, dayOfBirth, gender, idCard, phoneNumber, email, address, flag) {
+        document.getElementById("editId").value = id;
+        document.getElementById("editCustomerTypeId").value = customerTypeId;
+        document.getElementById("editName").value = name;
+        document.getElementById("editDayOfBirth").value = dayOfBirth;
+        document.getElementById("editIdCard").value = idCard;
+        document.getElementById("editPhoneNumber").value = phoneNumber;
+        document.getElementById("editEmail").value = email;
+        document.getElementById("editAddress").value = address;
+        document.getElementById("editFlag").value = flag;
+        if (gender === "true") {
+            document.getElementById("male").checked = true;
+            document.getElementById("female").checked = false;
+        } else {
+            document.getElementById("male").checked = false;
+            document.getElementById("female").checked = true;
+        }
+    }
+</script>
+<script th:src="@{/bootstrap-5.3.0-alpha1-dist/js/bootstrap.js}"></script>
+</body>
+</html>
