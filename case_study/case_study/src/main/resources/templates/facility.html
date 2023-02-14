@@ -6,21 +6,21 @@
 <div th:replace="~{layout :: navbar}"></div>
 
 <div class="row m-3">
-    <div class="col-md-8">
-        <h2>Facility</h2>
+    <div class="col-md-9">
+        <h2 style="margin-left: 61%">Facility</h2>
     </div>
-    <div class="col-md-4">
-        <!--        <form class="d-flex justify-content-center" role="search">-->
-        <!--            <input class="form-control" style="margin-left: 1%" type="search" th:value="${nameSearch}" name="nameSearch" placeholder="Name" aria-label="Search">-->
-        <!--            <select type="number"  class="form-control"  style="margin-left: 1%;width: 140%" name="typeIdSearch">-->
-        <!--                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}"-->
-        <!--                        th:text="${customerType.name}" th:if="${typeIdSearch == customerType.id }"></option>-->
-        <!--                <option value="0">Customer Type</option>-->
-        <!--                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}"-->
-        <!--                        th:text="${customerType.name}" th:if="${typeIdSearch != customerType.id }"></option>-->
-        <!--            </select>-->
-        <!--            <button class="btn btn-warning btn-outline-success search"  style="margin-left: 1%" type="submit">Search</button>-->
-        <!--        </form>-->
+    <div class="col-md-3">
+                <form class="d-flex justify-content-center" role="search">
+                    <input class="form-control" style="margin-left: 1%" type="search" th:value="${nameSearch}" name="nameSearch" placeholder="Name" aria-label="Search">
+                    <select type="number"  class="form-control"  style="margin-left: 1%;width: 140%" name="typeIdSearch">
+                        <option th:each="facilityType : ${facilityTypeList}" th:value="${facilityType.id}"
+                                th:text="${facilityType.name}" th:if="${typeIdSearch == facilityType.id }"></option>
+                        <option value="0">Customer Type</option>
+                        <option th:each="facilityType : ${facilityTypeList}" th:value="${facilityType.id}"
+                                th:text="${facilityType.name}" th:if="${typeIdSearch != facilityType.id }"></option>
+                    </select>
+                    <button class="btn btn-warning btn-outline-success search"  style="margin-left: 1%" type="submit">Search</button>
+                </form>
     </div>
 </div>
 
@@ -73,7 +73,7 @@
     </table>
 </div>
 
-<div style="margin-left: 44%">
+<div style="margin-left: 45%">
     <div class="row">
         <div class="col-md-9">
             <button type="button"
@@ -105,27 +105,27 @@
 <div class="modal fade" id="editFacilityModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" action="/facility/update" method="post">
+            <form class="form-horizontal" action="/facility/update" th:object="${fcl}" method="post">
                 <div class="modal-header justify-content-center m-2 p-0">
                     <h3 class="text-center text-primary">Edit Facility</h3>
                 </div>
 
                 <div class="modal-body">
 
-                    <input hidden class="form-control" name="idEdit" id="idEdit">
-                    <input hidden class="form-control" name="flagEdit" id="flagEdit">
+                    <input hidden class="form-control" th:field="*{id}" id="idEdit">
+                    <input hidden class="form-control" th:field="*{flag}" id="flagEdit">
 
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Facility Name</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="nameEdit" name="nameEdit">
+                            <input type="text" class="form-control" id="nameEdit" th:field="*{name}">
                         </div>
                     </div>
 
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Area</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="areaEdit" name="areaEdit">
+                            <input type="number" class="form-control" id="areaEdit" th:field="*{area}">
                         </div>
                     </div>
 
@@ -133,28 +133,30 @@
                         <label class="col-sm-4 col-form-label">Cost</label>
                         <div class="col-sm-8">
                             <input required pattern="^\d*([.]\d+)?$" title="Giá phải là số dương" type="number"
-                                   class="form-control" id="costEdit" name="costEdit">
+                                   class="form-control" id="costEdit" th:field="*{cost}">
                         </div>
                     </div>
 
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Max People</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="maxPeopleEdit" name="maxPeopleEdit">
+                            <input type="number" class="form-control" id="maxPeopleEdit" th:field="*{maxPeople}">
                         </div>
                     </div>
 
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Rent Type Name</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="rentTypeEdit" name="rentTypeEdit">
+<!--                            select-->
+                            <input type="text" class="form-control" id="rentTypeEdit" th:field="*{rentType.id}">
                         </div>
                     </div>
 
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Facility Type Id</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="facilityTypeIdEdit" name="facilityTypeIdEdit">
+<!--                            select option-->
+                            <input type="number" class="form-control" id="facilityTypeIdEdit" th:field="*{facilityType.id}">
                         </div>
                     </div>
 
@@ -162,7 +164,7 @@
                         <div class="m-2 row">
                             <label class="col-sm-4 col-form-label">Standard Room</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="standardRoomEdit" name="standardRoomEdit">
+                                <input type="text" class="form-control" id="standardRoomEdit" th:field="*{standardRoom}">
                             </div>
                         </div>
                     </div>
@@ -172,7 +174,7 @@
                             <label class="col-sm-4 col-form-label">Description Other Convenience</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="descriptionOtherConvenienceEdit"
-                                       name="descriptionEdit">
+                                       th:field="*{descriptionOtherConvenience}">
                             </div>
                         </div>
                     </div>
@@ -181,7 +183,7 @@
                         <div class="m-2 row">
                             <label class="col-sm-4 col-form-label">Pool area</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="poolAreaEdit" name="poolAreaEdit">
+                                <input type="text" class="form-control" id="poolAreaEdit" th:field="*{poolArea}">
                             </div>
                         </div>
                     </div>
@@ -192,7 +194,7 @@
                             <div class="col-sm-8">
                                 <input required pattern="^[1-9]\d*$" title="Số tầng phải là số nguyên dương"
                                        type="number" class="form-control" id="numberOfFloorsEdit"
-                                       name="numberOfFloorsEdit">
+                                       th:field="*{numberOfFloors}">
                             </div>
                         </div>
                     </div>
@@ -201,7 +203,7 @@
                         <div class="m-2 row">
                             <label class="col-sm-4 col-form-label">Facility free</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="facilityFreeEdit" name="facilityFreeEdit">
+                                <input type="text" class="form-control" id="facilityFreeEdit" th:field="*{facilityFree}">
                             </div>
                         </div>
                     </div>
@@ -324,12 +326,12 @@
                     </div>
 
                 </div>
-            </form>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Add</button>
             </div>
-
+            </form>
         </div>
     </div>
 </div>
