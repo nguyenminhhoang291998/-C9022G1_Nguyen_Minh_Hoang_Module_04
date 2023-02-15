@@ -16,6 +16,6 @@ public interface ICustomerService {
 
     Customer findById(int id);
 
-//    List<Customer> findAllCustomerIdName();
+    List<Customer> findAll();
 
 }

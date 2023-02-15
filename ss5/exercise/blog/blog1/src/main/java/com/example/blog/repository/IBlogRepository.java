@@ -11,6 +11,7 @@ import java.util.List;
 public interface IBlogRepository extends CrudRepository<Blog,Integer> {
     Page<Blog> findBySummaryContaining(String name,Pageable pageable);
 
+    List<Blog> findByCategory_Id(int id);
     Page<Blog> findByCategory_Id(int id,Pageable pageable);
 
 }

@@ -23,7 +23,7 @@ public class ProductController {
     private IProductService productService;
 
     @RequestMapping("")
-    public String showList(Model model){
+    public String showList(Model model,@SessionAttribute(value = "cart",required = false)CartDto cart){
         model.addAttribute("productList",productService.findAll());
         return "product/home";
     }

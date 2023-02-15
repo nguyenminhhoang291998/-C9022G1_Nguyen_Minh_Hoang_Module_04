@@ -13,6 +13,8 @@ public interface IBlogService {
 
     void save(Blog blog);
     Blog findById(int id);
+
+    List<Blog> findByCategory_Id(int id);
     void delete(int id);
     Page<Blog> findByCategory_Id(int id,Pageable pageable);
 }
