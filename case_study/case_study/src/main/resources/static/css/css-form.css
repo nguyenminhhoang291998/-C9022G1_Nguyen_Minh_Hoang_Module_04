@@ -26,4 +26,8 @@ td, th, tr{
     color: white;
 }
 
+#listAttachFacility div{
+    padding: 1px;
+}
+
 
