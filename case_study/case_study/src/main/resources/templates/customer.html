@@ -50,8 +50,7 @@
                 <!--                    <td>${customer.customerTypeId}</td>-->
                 <td th:text="${customer.name}"></td>
                 <td th:text="${customer.dayOfBirth}"></td>
-                <td><span th:if="${!customer.gender}">Nữ</span>
-                    <span th:if="${customer.gender}">Nam</span></td>
+                <td th:text="${customer.gender == true ? 'Nam' : 'Nữ' }"></td>
                 <!--                    <td>${customer.idCard}</td>-->
                 <td th:text="${customer.phoneNumber}"></td>
                 <td th:text="${customer.email}"></td>
@@ -215,6 +214,7 @@
                         <div class=" col-sm-4"><label class="control-label" for="editCustomerTypeId">Customer Type:</label></div>
                         <div class="col-sm-8">
                             <select type="number" class="form-control" id="editCustomerTypeId" th:field="*{customerType.id}">
+                                <option></option>
 
 <!--                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"-->
 <!--                                        th:if="${customerType.id == }"></option>-->
