@@ -1,4 +1,4 @@
-use md4_furama;
+use md4_case_study_furama;
 
 insert into position (id, name) 
 values 
@@ -37,31 +37,31 @@ email,address,position_id,education_degree_id,division_id,username,flag)
 VALUES 
   (
      1,'Nguyễn Văn An', '1970-11-07', 
-    '456231786', 10000000, '0901234121', 
+    '456231786', 10000000, '0901254121', 
     'annguyen@gmail.com', '25 Phan Thanh, Đà Nẵng', 
     1, 3, 1, 'user1',1
   ), 
   (
      2,'Nguyễn Văn Huy', '1975-11-07', 
-    '456291786', 11100000, '0901264121', 
+    '456291786', 11100000, '0901264101', 
     'huynguyen@gmail.com', '10 Tố Hữu, Đà Nẵng', 
     2, 2, 2, 'user2',1
   ), 
   (
     3,'Nguyễn Văn Long', '1975-11-07', 
-    '456291786', 11100000, '0901264121', 
+    '446297786', 11100000, '0907264122', 
     'longnguyen@gmail.com', '29 Xuân Diệu, Đà Nẵng', 
     1, 1, 3, 'user3',1
   ), 
   (
     4,'Nguyễn Văn Thành', '1975-11-07', 
-    '456291786', 11100000, '0901264121', 
+    '456290786', 11100000, '0901264121', 
     'thanhnguyen@gmail.com', '298 Nguyễn Tất Thành, Đà Nẵng', 
     2, 1, 3, 'user4',1
   ), 
   (
     5,'Nguyễn Văn Công', '1975-11-07', 
-    '456291786', 11100000, '0901264121', 
+    '456291789', 11100000, '0901264127', 
     'congnguyen@gmail.com', '113 Tố Hữu, Đà Nẵng', 
     2, 1, 1, 'user5',1
   ), 

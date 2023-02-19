@@ -11,7 +11,7 @@ public class Role {
     @Id
     private int id;
 
-    @Column(columnDefinition = "varchar(45)")
+    @Column(columnDefinition = "varchar(45)",unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "roleSet")

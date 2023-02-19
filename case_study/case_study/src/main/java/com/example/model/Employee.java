@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -9,21 +10,26 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull
     @Column(columnDefinition = "varchar(45)")
     private String name;
 
     @Column(columnDefinition = "date")
     private String dayOfBirth;
 
-    @Column(columnDefinition = "varchar(45)")
+    @NotNull
+    @Column(columnDefinition = "varchar(45)",unique = true)
     private String idCard;
 
+    @NotNull
     private double salary;
 
-    @Column(columnDefinition = "varchar(45)")
+    @NotNull
+    @Column(columnDefinition = "varchar(45)",unique = true)
     private String phoneNumber;
 
-    @Column(columnDefinition = "varchar(45)")
+    @NotNull
+    @Column(columnDefinition = "varchar(45)",unique = true)
     private String email;
 
     @Column(columnDefinition = "varchar(45)")

@@ -1,5 +1,7 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -8,6 +10,7 @@ public class User {
     @Id
     private String userName;
 
+    @JsonIgnore
     private String passWord;
 
     @OneToOne(mappedBy = "user")

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -37,8 +38,8 @@ public class ContractController {
     @Autowired
     IAttachFacilityService attachFacilityService;
     @RequestMapping("")
-    public String showList(Model model){
-        Pageable pageable = PageRequest.of(0,3);
+    public String showList(Model model, @RequestParam(required = false,defaultValue = "0") int page){
+        Pageable pageable = PageRequest.of(page,3);
         model.addAttribute("attachFacilityList",attachFacilityService.findAll());
         model.addAttribute("employeeList",employeeService.findAll());
         model.addAttribute("customerList",customerService.findAll());

@@ -10,7 +10,7 @@ import java.util.Set;
 public class EducationDegree {
     @Id
     private int id;
-    @Column(columnDefinition = "varchar(45)")
+    @Column(columnDefinition = "varchar(45)",unique = true)
     private String name;
 
     @OneToMany(mappedBy = "educationDegree")

@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -10,6 +11,7 @@ public class Customer {
     private int id;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "customer_type_id",referencedColumnName = "id")
     private CustomerType customerType;
 
@@ -19,15 +21,19 @@ public class Customer {
     @Column(columnDefinition = "date")
     private String dayOfBirth;
 
+    @NotNull
     private boolean gender;
 
-    @Column(columnDefinition = "varchar(45)")
+    @NotNull
+    @Column(columnDefinition = "varchar(45)",unique = true)
     private String idCard;
 
-    @Column(columnDefinition = "varchar(45)")
+    @NotNull
+    @Column(columnDefinition = "varchar(45)",unique = true)
     private String phoneNumber;
+    @NotNull
 
-    @Column(columnDefinition = "varchar(45)")
+    @Column(columnDefinition = "varchar(45)",unique = true)
     private String email;
 
     @Column(columnDefinition = "varchar(45)")
@@ -48,6 +54,7 @@ public class Customer {
         this.id = id;
         this.customerType = customerType;
         this.name = name;
+
         this.dayOfBirth = dayOfBirth;
         this.gender = gender;
         this.idCard = idCard;

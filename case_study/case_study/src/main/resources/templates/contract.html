@@ -8,7 +8,7 @@
 <body>
 <div th:replace="~{layout :: navbar}"></div>
 
-<h2>Contract</h2>
+<h2 style="margin-left: 45%;margin-top: 1%">Contract</h2>
 <h3 class="message" th:text="${mess}"></h3>
 <div class="table-list">
     <div class="table-responsive">
@@ -52,27 +52,21 @@
 </div>
 
 <div class="row">
-
-
-    <div class="justify-content-center d-flex col-md-9">
-        <button type="button" class="btn btn-success" onclick="showFormAddNewContract()" data-bs-toggle="modal"
+    <div class="col-md-10">
+        <button style="margin-left: 53%" type="button" class="btn btn-success" onclick="showFormAddNewContract()" data-bs-toggle="modal"
                 data-bs-target="#addModal">
             Add New Contract
         </button>
     </div>
-<!--    <div class="col-md-3">-->
-<!--        <a th:href="@{/customer/(page=${customerPage.number - 1},nameSearch=${nameSearch},emailSearch=${emailSearch},-->
-<!--            typeIdSearch=${typeIdSearch})}" th:if="${customerPage.hasPrevious()}" class="previous">-->
-<!--            <button class="btn btn-primary" th:attr="onmouseover=|infoPre('${customerPage.number}')|" id="btnPre">-->
-<!--                &laquo;-->
-<!--            </button>-->
-<!--        </a>-->
-<!--        <span th:text="${customerPage.number + 1}"></span>/<span th:text="${customerPage.totalPages}"></span>-->
-<!--        <a th:href="@{/customer/(page=${customerPage.number + 1},nameSearch=${nameSearch},emailSearch=${emailSearch},-->
-<!--            typeIdSearch=${typeIdSearch})}" th:if="${customerPage.hasNext()}" class="next">-->
-<!--            <button class="btn btn-primary">&raquo;</button>-->
-<!--        </a>-->
-<!--    </div>-->
+    <div class="col-md-2">
+        <a th:href="@{/contract/(page=${dtoPage.number - 1})}" th:if="${dtoPage.hasPrevious()}" class="previous">
+            <button class="btn btn-primary" id="btnPre">&laquo;</button>
+        </a>
+        <span th:text="${dtoPage.number + 1}"></span>/<span th:text="${dtoPage.totalPages}"></span>
+        <a th:href="@{/contract/(page=${dtoPage.number + 1})}" th:if="${dtoPage.hasNext()}" class="next">
+            <button class="btn btn-primary">&raquo;</button>
+        </a>
+    </div>
 </div>
 <!--modal add new contract-->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -113,16 +107,28 @@
                         <div class=" col-sm-4">
                             <label class="control-label" for="totalCost">Total cost:</label></div>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="totalCost" readonly>
+                            <input  class="form-control" id="totalCost" readonly>
                         </div>
                     </div>
 
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4">
-                            <label class="control-label">Customers rent service:</label></div>
+                            <label class="control-label">Employee:</label></div>
+                        <div class="col-sm-8">
+                            <select class="form-control" th:field="*{employee.id}">
+                                <option value="0" disabled>Chọn nhân viên</option>
+                                <option th:each="emp : ${employeeList}" th:value="${emp.id}"
+                                        th:text="${emp.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group align-items-center m-2">
+                        <div class=" col-sm-4">
+                            <label class="control-label">Customers:</label></div>
                         <div class="col-sm-8">
                             <select class="form-control" th:field="*{customer.id}">
-                                <option value="0">Chọn khách hàng</option>
+                                <option value="0" disabled>Chọn khách hàng</option>
                                 <option th:each="cus : ${customerList}" th:value="${cus.id}"
                                         th:text="${cus.name}"></option>
                             </select>
@@ -149,7 +155,7 @@
                             <button class="btn btn-primary mx-4" type="button" id="btnShowListAttachFacility"
                                     onclick="showListAttachFacility()">+
                             </button>
-                            <div style="border: none; display:none" id="listAttachFacility" class="form-control">
+                            <div style="border: none; display:none" id="listAttachFacility" class="form-control" th:object="${contractDetail}">
                                 <th:block th:field="*{facility.contractSet}"
                                           th:each="attachFacility : ${attachFacilityList}">
                                     <div class="row  checkbox-list">
@@ -223,7 +229,7 @@
             success: function (data) {
                 let content = '';
 
-                $('#bodyDiv').html(content);
+                $('#totalCost').html(content);
             }
         })
 
