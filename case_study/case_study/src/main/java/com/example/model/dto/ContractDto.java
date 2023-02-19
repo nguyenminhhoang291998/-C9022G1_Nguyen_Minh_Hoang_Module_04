@@ -27,15 +27,13 @@ public class ContractDto {
 
     private Set<ContractDetail> contractDetailSet;
 
-    private boolean flag;
-
     public ContractDto() {
     }
 
     public ContractDto( String startDate, String endDate,
                        double deposit, Employee employee,
                        Customer customer, Facility facility,
-                       Set<ContractDetail> contractDetailSet, boolean flag) {
+                       Set<ContractDetail> contractDetailSet) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.deposit = deposit;
@@ -43,7 +41,7 @@ public class ContractDto {
         this.customer = customer;
         this.facility = facility;
         this.contractDetailSet = contractDetailSet;
-        this.flag = flag;
+
     }
 
     public String getStartDate() {
@@ -102,11 +100,4 @@ public class ContractDto {
         this.contractDetailSet = contractDetailSet;
     }
 
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
 }

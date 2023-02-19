@@ -56,7 +56,7 @@
                 <td th:text="${customer.email}"></td>
                 <td th:text="${customer.address}"></td>
                 <td>
-                    <button th:attr=" onclick=|infoEdit('${customer.id}','${customer.customerType}','${customer.name}','${customer.dayOfBirth}',
+                    <button th:attr=" onclick=|infoEdit('${customer.id}','${customer.customerType.id}','${customer.name}','${customer.dayOfBirth}',
                                 '${customer.gender}','${customer.idCard}','${customer.phoneNumber}','${customer.email}','${customer.address}','${customer.flag}')|"
                             type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#editModal">Edit
@@ -213,12 +213,11 @@
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="editCustomerTypeId">Customer Type:</label></div>
                         <div class="col-sm-8">
-                            <select type="number" class="form-control" id="editCustomerTypeId" th:field="*{customerType.id}">
-                                <option></option>
+                            <select type="number" class="form-control" id="editCustomerTypeId" th:field="*{customerType.id}" >
 
 <!--                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"-->
 <!--                                        th:if="${customerType.id == }"></option>-->
-                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"></option>
+<!--                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"></option>-->
                             </select>
                         </div>
                     </div>

@@ -1,5 +1,8 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -30,6 +33,7 @@ public class Contract {
     @JoinColumn(name = "facility_id",referencedColumnName = "id")
     private Facility facility;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "contract")
     private Set<ContractDetail> contractDetailSet;
 
