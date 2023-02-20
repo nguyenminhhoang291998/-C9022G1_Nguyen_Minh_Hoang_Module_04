@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class FacilityRentTypeService implements IFacilityRentTypeService {
     @Autowired
-    IFacilityRentTypeRepository facilityRentTypeRepository;
+    private IFacilityRentTypeRepository facilityRentTypeRepository;
 
     @Override
     public List<RentType> findAll() {

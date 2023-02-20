@@ -53,7 +53,7 @@
             <td th:text="${facility.descriptionOtherConvenience}"></td>
             <td th:text="${facility.facilityFree}"></td>
             <td>
-                <button th:attr="onclick=|infoEdit('${facility.id}','${facility.name}','${facility.area}',
+                <button th:attr="onclick=|getEditInfo('${facility.id}','${facility.name}','${facility.area}',
                             '${facility.cost}','${facility.maxPeople}','${facility.rentType.id}','${facility.facilityType.id}',
                             '${facility.standardRoom}','${facility.descriptionOtherConvenience}','${facility.poolArea}','${facility.numberOfFloors}',
                             '${facility.facilityFree}','${facility.flag}')|" type="button" class="btn btn-primary"
@@ -63,7 +63,7 @@
             </td>
 
             <td>
-                <button th:attr="onclick=|infoDelete('${facility.id}','${facility.name}')|" type="button"
+                <button th:attr="onclick=|getDeleteInfo('${facility.id}','${facility.name}')|" type="button"
                         class="btn btn-danger" data-bs-toggle="modal"
                         data-bs-target="#deleteFacilityModal">Delete
                 </button>
@@ -147,16 +147,19 @@
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Rent Type Name</label>
                         <div class="col-sm-8">
-<!--                            select-->
-                            <input type="text" class="form-control" id="rentTypeEdit" th:field="*{rentType.id}">
+                            <select type="number" class="form-control" id="rentTypeEdit" th:field="*{rentType.id}" >
+                                <option th:each="rentType : ${facilityRentTypeList}" th:value="${rentType.id}" th:text="${rentType.name}"></option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="m-2 row">
-                        <label class="col-sm-4 col-form-label">Facility Type Id</label>
+                        <label class="col-sm-4 col-form-label">Facility Type</label>
                         <div class="col-sm-8">
-<!--                            select option-->
-                            <input type="number" class="form-control" id="facilityTypeIdEdit" th:field="*{facilityType.id}">
+                              <select type="number" class="form-control" id="facilityTypeIdEdit" th:field="*{facilityType.id}" >
+                                <option th:each="facilityType : ${facilityTypeList}" th:value="${facilityType.id}" th:text="${facilityType.name}"></option>
+                            </select>
+
                         </div>
                     </div>
 
@@ -388,7 +391,7 @@
         document.getElementById("facilityFree").style.display = 'block';
     }
 
-    function infoEdit(id, name, area, cost, maxPeople, rentTypeId, facilityTypeId, standardRoom, descriptionOtherConvenience, poolArea, numberOfFloors, facilityFree) {
+    function getEditInfo(id, name, area, cost, maxPeople, rentTypeId, facilityTypeId, standardRoom, descriptionOtherConvenience, poolArea, numberOfFloors, facilityFree) {
         document.getElementById("idEdit").value = id;
         document.getElementById("nameEdit").value = name;
         document.getElementById("areaEdit").value = area;
@@ -422,7 +425,7 @@
         }
     }
 
-    function infoDelete(id, name) {
+    function getDeleteInfo(id, name) {
         document.getElementById("deleteId").value = id;
         document.getElementById("deleteName").innerText = name;
     }

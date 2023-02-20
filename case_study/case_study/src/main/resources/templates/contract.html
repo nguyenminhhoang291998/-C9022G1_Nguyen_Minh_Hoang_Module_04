@@ -28,14 +28,14 @@
             <tbody>
             <tr th:each="dto : ${dtoPage}">
                 <td th:text="${dto.id}"></td>
-                <td th:text="${dto.facilityName}"></td>
-                <td th:text="${dto.customerName}"></td>
-                <td th:text="${dto.startDate}"></td>
-                <td th:text="${dto.endDate}"></td>
+                <td th:text="${dto.facility_name}"></td>
+                <td th:text="${dto.customer_name}"></td>
+                <td th:text="${dto.start_date}"></td>
+                <td th:text="${dto.end_date}"></td>
                 <td th:text="${dto.deposit}"></td>
-                <td th:text="${dto.totalCost}"></td>
+                <td th:text="${dto.total_cost}"></td>
                 <td>
-                    <button type="button" th:attr="onclick=|showAttachFacility('${dto.id}','${dto.customerName}')|"
+                    <button type="button" th:attr="onclick=|showAttachFacility('${dto.id}','${dto.customer_name}')|"
                             class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#newAttachFacilityModal">+
                     </button>
@@ -76,6 +76,7 @@
             <div class="modal-body m-0 p-0">
 
                 <form class="form-horizontal" action="/contract/add" th:object="${contractDto}" method="post">
+                    <input class="classContractId" hidden/>
 
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4">
@@ -155,23 +156,29 @@
                             <button class="btn btn-primary mx-4" type="button" id="btnShowListAttachFacility"
                                     onclick="showListAttachFacility()">+
                             </button>
-                            <div style="border: none; display:none" id="listAttachFacility" class="form-control" th:object="${contractDetail}">
-                                <th:block th:field="*{facility.contractSet}"
-                                          th:each="attachFacility : ${attachFacilityList}">
-                                    <div class="row  checkbox-list">
+                            <div style="border: none; display:none" id="listAttachFacility" class="form-control" >
+                                <th:block  th:each="attachFacility : ${attachFacilityList}"
+                                           th:field="*{contractDetailSet}" >
+
+                                    <div class="row  checkbox-list" th:object="${contractDetail}" >
+
+                                        <input class="classContractId" th:field="*{contract.id}">
+
                                         <div class="col-md-7 align-items-center">
                                             <input class="form-check-input checkbox" type="checkbox"
-                                                   th:value="${attachFacility.id}"
+                                                  th:field="*{attachFacility.id}" th:value="${attachFacility.id}"
                                                    th:text="${attachFacility.name}">
                                         </div>
                                         <div class="col-md-2 align-items-center">
                                             <p>SL:</p>
                                         </div>
                                         <div class="col-md-3">
-                                            <input type="number" style="width: 55px" class="form-control quantity"
+                                            <input th:field="*{quantity}" type="number" style="width: 55px" class="form-control quantity"
                                                    min="1" value="1">
                                         </div>
                                     </div>
+
+
                                 </th:block>
                             </div>
                         </div>
@@ -193,6 +200,8 @@
 
 <script>
     function showFormAddNewContract() {
+        document.getElementsByClassName("classContractId").value = Math.floor(Math.random()*10000) ;
+
         var order = {
             option: '',
             checkboxes: {}

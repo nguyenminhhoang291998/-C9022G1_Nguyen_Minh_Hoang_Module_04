@@ -21,7 +21,6 @@ public class Customer {
     @Column(columnDefinition = "date")
     private String dayOfBirth;
 
-    @NotNull
     private boolean gender;
 
     @NotNull

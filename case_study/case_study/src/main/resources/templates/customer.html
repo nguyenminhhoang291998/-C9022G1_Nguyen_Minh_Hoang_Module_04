@@ -56,14 +56,14 @@
                 <td th:text="${customer.email}"></td>
                 <td th:text="${customer.address}"></td>
                 <td>
-                    <button th:attr=" onclick=|infoEdit('${customer.id}','${customer.customerType.id}','${customer.name}','${customer.dayOfBirth}',
+                    <button th:attr=" onclick=|getEditInfo('${customer.id}','${customer.customerType.id}','${customer.name}','${customer.dayOfBirth}',
                                 '${customer.gender}','${customer.idCard}','${customer.phoneNumber}','${customer.email}','${customer.address}','${customer.flag}')|"
                             type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#editModal">Edit
                     </button>
                 </td>
                 <td>
-                    <button th:attr="onclick=|infoDelete('${customer.id}','${customer.name}')|" type="button"
+                    <button th:attr="onclick=|getDeleteInfo('${customer.id}','${customer.name}')|" type="button"
                             class="btn btn-danger" data-bs-toggle="modal"
                             data-bs-target="#deleteModal">Delete
                     </button>
@@ -86,8 +86,8 @@
         <div class="col-md-3">
             <a  th:href="@{/customer/(page=${customerPage.number - 1},nameSearch=${nameSearch},emailSearch=${emailSearch},
             typeIdSearch=${typeIdSearch})}" th:if="${customerPage.hasPrevious()}" class="previous">
-                <button class="btn btn-primary" th:attr="onmouseover=|infoPre('${customerPage.number}')|" id="btnPre" >&laquo;</button>
-<!--                <button class="btn btn-primary" th:attr="onmouseover=|infoPre('${customerPage.number}')|" id="btnPre" >&laquo; Previous</button>-->
+<!--                disable-->
+                <button class="btn btn-primary" th:attr="onchange=|infoPre('${customerPage.number}')|" id="btnPre" >&laquo;</button>
             </a>
             <span th:text="${customerPage.number + 1}"></span>/<span th:text="${customerPage.totalPages}"></span>
             <a th:href="@{/customer/(page=${customerPage.number + 1},nameSearch=${nameSearch},emailSearch=${emailSearch},
@@ -214,10 +214,7 @@
                         <div class=" col-sm-4"><label class="control-label" for="editCustomerTypeId">Customer Type:</label></div>
                         <div class="col-sm-8">
                             <select type="number" class="form-control" id="editCustomerTypeId" th:field="*{customerType.id}" >
-
-<!--                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"-->
-<!--                                        th:if="${customerType.id == }"></option>-->
-<!--                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"></option>-->
+                                <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"></option>
                             </select>
                         </div>
                     </div>
@@ -314,15 +311,17 @@
     </div>
 </div>
 <script>
-    // function infoPre(numberPage){
-    //     document.getElementById("btnPre").disabled = (numberPage < 1);
-    // }
-    function infoDelete(id, name) {
+
+    function infoPre(numberPage){
+        document.getElementById("btnPre").style.disabled = (numberPage < 1);
+    }
+
+    function getDeleteInfo(id, name) {
         document.getElementById("deleteId").value = id;
         document.getElementById("deleteName").innerText = name;
     }
 
-    function infoEdit(id, customerTypeId, name, dayOfBirth, gender, idCard, phoneNumber, email, address, flag) {
+    function getEditInfo(id, customerTypeId, name, dayOfBirth, gender, idCard, phoneNumber, email, address, flag) {
         document.getElementById("editId").value = id;
         document.getElementById("editCustomerTypeId").value = customerTypeId;
         document.getElementById("editName").value = name;

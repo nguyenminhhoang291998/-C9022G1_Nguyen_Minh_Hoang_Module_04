@@ -21,7 +21,7 @@ public class Employee {
     @Column(columnDefinition = "varchar(45)",unique = true)
     private String idCard;
 
-    @NotNull
+
     private double salary;
 
     @NotNull

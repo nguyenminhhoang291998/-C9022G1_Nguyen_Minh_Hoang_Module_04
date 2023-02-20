@@ -18,4 +18,5 @@ public interface IFacilityRepository extends JpaRepository<Facility,Integer> {
 
     @Query(value = "select * from facility where flag = true",nativeQuery = true)
     List<Facility> findAll();
+
 }

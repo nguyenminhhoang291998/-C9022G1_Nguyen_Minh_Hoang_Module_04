@@ -10,7 +10,7 @@ public interface ICustomerService {
 
     Page<Customer> search(String name,String email, int customerType, Pageable pageable);
 
-    void save(Customer customer);
+    boolean save(Customer customer);
 
 //    void delete(int id);
 

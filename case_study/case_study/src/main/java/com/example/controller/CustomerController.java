@@ -18,10 +18,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("customer")
 public class CustomerController {
     @Autowired
-    ICustomerService customerService;
+    private ICustomerService customerService;
 
     @Autowired
-    ICustomerTypeService customerTypeService;
+    private ICustomerTypeService customerTypeService;
 
     @RequestMapping("")
     public String showPageAndSearch(Model model, @RequestParam(required = false,defaultValue = "") String nameSearch,
@@ -45,16 +45,22 @@ public class CustomerController {
     @RequestMapping("save")
     public String save(@ModelAttribute Customer customer, RedirectAttributes redirect){
         customer.setFlag(true);
-        customerService.save(customer);
-        redirect.addFlashAttribute("mess","Thêm thành công");
+        if(customerService.save(customer)){
+            redirect.addFlashAttribute("mess","Thêm không thành công vì thông tin đã trùng lặp.");
+        }else {
+            redirect.addFlashAttribute("mess","Thêm mới thành công");
+        }
         return "redirect:/customer/";
     }
 
     @RequestMapping("update")
     public String update(@ModelAttribute Customer customer, RedirectAttributes redirect){
         customer.setFlag(true);
-        customerService.save(customer);
-        redirect.addFlashAttribute("mess","Sửa thành công");
+        if(customerService.save(customer)){
+            redirect.addFlashAttribute("mess","Sửa không thành công vì thông tin đã trùng lặp.");
+        }else {
+            redirect.addFlashAttribute("mess","Sửa thành công");
+        }
         return "redirect:/customer/";
     }
 

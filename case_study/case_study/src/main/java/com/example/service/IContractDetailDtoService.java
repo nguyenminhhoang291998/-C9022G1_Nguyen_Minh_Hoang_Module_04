@@ -1,7 +1,7 @@
 package com.example.service;
 
 
-import com.example.model.dto.ContractDetailDto;
+import com.example.dto.ContractDetailDto;
 
 import java.util.List;
 

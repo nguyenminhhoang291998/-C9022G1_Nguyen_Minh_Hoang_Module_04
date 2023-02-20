@@ -18,4 +18,8 @@ public interface ICustomerRepository extends JpaRepository<Customer,Integer> {
 
     @Query(value = "select * from customer where flag = true",nativeQuery = true)
     List<Customer> findAll();
+
+    Customer findByEmail(String email);
+    Customer findByPhoneNumber(String phoneNumber);
+    Customer findByIdCard(String idCard);
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class FacilityTypeService implements IFacilityTypeService {
     @Autowired
-    IFacilityTypeRepository facilityTypeRepository;
+    private IFacilityTypeRepository facilityTypeRepository;
     @Override
     public List<FacilityType> findAll() {
         return facilityTypeRepository.findAll();

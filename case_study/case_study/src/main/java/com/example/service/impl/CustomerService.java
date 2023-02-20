@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class CustomerService implements ICustomerService {
     @Autowired
-    ICustomerRepository customerRepository;
+    private ICustomerRepository customerRepository;
     @Override
     public Page<Customer> search(String name,String email, int customerTypeId, Pageable pageable) {
         if(customerTypeId==0){
@@ -23,14 +23,17 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public void save(Customer customer) {
+    public boolean save(Customer customer) {
+        if((customerRepository.findByEmail(customer.getEmail()) != null)
+                || (customerRepository.findByPhoneNumber(customer.getPhoneNumber())!= null) ||
+                (customerRepository.findByIdCard(customer.getIdCard())!= null)){
+            return true;
+        }
         customerRepository.save(customer);
+        return false;
     }
 
-//    @Override
-//    public void delete(int id) {
-//        customerRepository.deleteById(id);
-//    }
+
 
     @Override
     public Customer findById(int id) {

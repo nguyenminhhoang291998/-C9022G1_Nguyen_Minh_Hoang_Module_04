@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class FacilityService implements IFacilityService {
     @Autowired
-    IFacilityRepository facilityRepository;
+    private IFacilityRepository facilityRepository;
     @Override
     public Page<Facility> search(String name, int facilityTypeId, Pageable pageable) {
         if(facilityTypeId == 0){

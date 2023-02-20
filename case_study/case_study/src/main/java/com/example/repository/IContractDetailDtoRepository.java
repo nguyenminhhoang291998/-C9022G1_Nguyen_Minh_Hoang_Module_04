@@ -1,7 +1,6 @@
 package com.example.repository;
 
-import com.example.model.ContractDetail;
-import com.example.model.dto.ContractDetailDto;
+import com.example.dto.ContractDetailDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

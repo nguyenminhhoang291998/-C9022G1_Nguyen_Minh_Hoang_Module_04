@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class EmployeeService implements IEmployeeService {
     @Autowired
-    IEmployeeRepository employeeRepository;
+    private IEmployeeRepository employeeRepository;
     @Override
     public List<Employee> findAll() {
         return employeeRepository.findAll();
