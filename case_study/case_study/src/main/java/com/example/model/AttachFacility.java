@@ -1,6 +1,7 @@
 package com.example.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class AttachFacility {
     @Column(columnDefinition = "varchar(45)")
     private String status;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "attachFacility")
     private Set<ContractDetail> contractDetailSet;
 

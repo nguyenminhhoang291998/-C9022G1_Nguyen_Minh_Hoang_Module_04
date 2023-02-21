@@ -1,5 +1,8 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -38,6 +41,7 @@ public class Customer {
     @Column(columnDefinition = "varchar(45)")
     private String address;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer")
     private Set<Contract> contractSet;
 

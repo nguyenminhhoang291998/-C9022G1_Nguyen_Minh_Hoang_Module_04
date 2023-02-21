@@ -1,5 +1,8 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -39,6 +42,7 @@ public class Facility {
     @Column(columnDefinition = "text")
     private String facilityFree;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "facility")
     private Set<Contract> contractSet;
 

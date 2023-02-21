@@ -115,6 +115,7 @@
                         <div class=" col-sm-4"><label class="control-label" for="newCustomerTypeId">Customer Type:</label></div>
                         <div class="col-sm-8">
                             <select type="number" class="form-control" id="newCustomerTypeId" th:field="*{customerType.id}" >
+                                <option value="0" disabled>Chọn loại khách hàng</option>
                                 <option th:each="customerType : ${customerTypeList}" th:value="${customerType.id}" th:text="${customerType.name}"></option>
                             </select>
                         </div>

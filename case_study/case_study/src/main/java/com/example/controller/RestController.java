@@ -1,7 +1,13 @@
 package com.example.controller;
 
 import com.example.dto.ContractDetailDto;
-import com.example.service.IContractDetailDtoService;
+import com.example.dto.ContractDto;
+import com.example.dto.IContractDetailDto;
+import com.example.model.Contract;
+import com.example.model.ContractDetail;
+import com.example.service.IContractDetailService;
+import com.example.service.IContractService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,24 +16,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
+@CrossOrigin()
 @RequestMapping("api")
 public class RestController {
+
     @Autowired
-    private IContractDetailDtoService contractDetailDtoService;
+    private IContractService contractService;
+
+    @Autowired
+    private IContractDetailService contractDetailService;
 
     @GetMapping("contractDetail")
-    public ResponseEntity<List<ContractDetailDto>> findAll(@RequestParam int contractId){
-        List<ContractDetailDto> contractDetailDtoList = contractDetailDtoService.findAll(contractId);
-        if(contractDetailDtoList.isEmpty()){
+    public ResponseEntity<List<IContractDetailDto>> findAll(@RequestParam int contractId) {
+        List<IContractDetailDto> contractDetailDtoList = contractService.findContractDetailByContractId(contractId);
+        if (contractDetailDtoList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(contractDetailDtoList,HttpStatus.OK);
+        return new ResponseEntity<>(contractDetailDtoList, HttpStatus.OK);
     }
-//
-//    @PostMapping("getTotal")
-//    public ResponseEntity<Double> getTotal(@RequestBody){
-//
-//    }
+
+    @PostMapping(value = "contract/save")
+    public ResponseEntity save(@RequestBody List<ContractDetailDto> contractDetailDtoList) {
+        Contract contract = new Contract();
+        BeanUtils.copyProperties(contractDetailDtoList.get(0).getContractDto(), contract);
+        contractService.save(contract);
+        for (ContractDetailDto ct: contractDetailDtoList) {
+            Contract contrac1 = new Contract();
+            BeanUtils.copyProperties(ct.getContractDto(),contrac1);
+            ContractDetail contractDetail = new ContractDetail();
+            BeanUtils.copyProperties(ct,contractDetail);
+            contractDetail.setContract(contrac1);
+            contractDetailService.save(contractDetail);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }

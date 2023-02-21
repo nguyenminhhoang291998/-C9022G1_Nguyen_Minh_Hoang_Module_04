@@ -13,6 +13,8 @@ import java.util.Set;
 
 public class ContractDto {
 
+    private int id;
+
     private String startDate;
 
     private String endDate;
@@ -25,25 +27,31 @@ public class ContractDto {
 
     private Facility facility;
 
-    private Set<ContractDetail> contractDetailSet;
+
 
     public ContractDto() {
     }
 
-    public ContractDto( String startDate, String endDate,
+    public ContractDto(int id, String startDate, String endDate,
                        double deposit, Employee employee,
-                       Customer customer, Facility facility,
-                       Set<ContractDetail> contractDetailSet) {
+                       Customer customer, Facility facility
+                     ) {
+        this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.deposit = deposit;
         this.employee = employee;
         this.customer = customer;
         this.facility = facility;
-        this.contractDetailSet = contractDetailSet;
-
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getStartDate() {
         return startDate;
     }
@@ -90,14 +98,6 @@ public class ContractDto {
 
     public void setFacility(Facility facility) {
         this.facility = facility;
-    }
-
-    public Set<ContractDetail> getContractDetailSet() {
-        return contractDetailSet;
-    }
-
-    public void setContractDetailSet(Set<ContractDetail> contractDetailSet) {
-        this.contractDetailSet = contractDetailSet;
     }
 
 }

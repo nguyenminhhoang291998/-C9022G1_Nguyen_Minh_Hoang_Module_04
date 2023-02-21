@@ -9,8 +9,7 @@ left join facility f on c.facility_id = f.id
 left join customer cus on c.customer_id = cus.id
 left join contract_detail cd on c.id = cd.contract_id
 left join attach_facility af on af.id = cd.attach_facility_id
-group by c.id
-order by c.id;
+group by c.id;
 
 CREATE VIEW select_contract_detail as
 select cd.id ,c.id as contract_id , af.name as attach_facility_name, cd.quantity

@@ -34,9 +34,6 @@ public class ContractController {
     private IContractService contractService;
 
     @Autowired
-    private IContractDetailDtoService contractDetailDtoService;
-
-    @Autowired
     private IContractDetailService contractDetailService;
 
     @Autowired
@@ -44,7 +41,6 @@ public class ContractController {
     @RequestMapping("")
     public String showList(Model model, @RequestParam(required = false,defaultValue = "0") int page){
         Pageable pageable = PageRequest.of(page,3);
-        Page<IContractDto> dtos = contractService.findAll(pageable);
         model.addAttribute("attachFacilityList",attachFacilityService.findAll());
         model.addAttribute("employeeList",employeeService.findAll());
         model.addAttribute("customerList",customerService.findAll());

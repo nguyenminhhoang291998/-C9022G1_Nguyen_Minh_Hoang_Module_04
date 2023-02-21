@@ -1,6 +1,7 @@
 package com.example.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -32,7 +33,7 @@ public class Contract {
     @JoinColumn(name = "facility_id",referencedColumnName = "id")
     private Facility facility;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "contract")
     private Set<ContractDetail> contractDetailSet;
 
@@ -41,20 +42,20 @@ public class Contract {
     public Contract() {
     }
 
-    public Contract(int id, String startDate, String endDate,
-                    double deposit, Employee employee,
-                    Customer customer, Facility facility,
-                    Set<ContractDetail> contractDetailSet, boolean flag) {
-        this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.deposit = deposit;
-        this.employee = employee;
-        this.customer = customer;
-        this.facility = facility;
-        this.contractDetailSet = contractDetailSet;
-        this.flag = flag;
-    }
+//    public Contract(int id, String startDate, String endDate,
+//                    double deposit, Employee employee,
+//                    Customer customer, Facility facility,
+//                    Set<ContractDetail> contractDetailSet, boolean flag) {
+//        this.id = id;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//        this.deposit = deposit;
+//        this.employee = employee;
+//        this.customer = customer;
+//        this.facility = facility;
+//        this.contractDetailSet = contractDetailSet;
+//        this.flag = flag;
+//    }
 
     public int getId() {
         return id;
