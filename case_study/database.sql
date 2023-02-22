@@ -1,4 +1,4 @@
-use md4_case_study_furama;
+use md4_case_study;
 
 insert into position (id, name) 
 values 
@@ -20,13 +20,14 @@ values
   (2, 'Hành chính'), 
   (3, 'Phục vụ'), 
   (4, 'Quản lý');
-insert into user (user_name,pass_word)
+insert into user (username,password)
 values 
   ('user1', '123456'), 
   ('user2', '123456'), 
   ('user3', '123456'), 
   ('user4', '123456'), 
   ('user5', '123456'), 
+  ('admin','123456'),
   ('user6', '123456'), 
   ('user7', '123456'), 
   ('user8', '123456'), 
@@ -235,56 +236,56 @@ values
   
 insert into contract (
   id, start_date, end_date, deposit, 
-  employee_id, customer_id, facility_id,flag
+  employee_id, customer_id, facility_id
 ) 
 values 
   (
     1, '2020-12-08', '2020-12-08', 0, 3, 
-    1, 3,1
+    1, 3
   ), 
   (
     2, '2020-07-14', '2020-07-21', 200000, 
-    7, 3, 1,1
+    7, 3, 1
   ), 
   (
     3, '2021-03-15', '2021-03-17', 50000, 
-    3, 4, 2,1
+    3, 4, 2
   ), 
   (
     4, '2021-01-14', '2021-01-18', 100000, 
-    7, 5, 5,1
+    7, 5, 5
   ), 
   (
     5, '2021-07-14', '2021-07-15', 0, 7, 
-    2, 6,1
+    2, 6
   ), 
   (
     6, '2021-06-01', '2021-06-03', 0, 7, 
-    7, 6,1
+    7, 6
   ), 
   (
     7, '2021-09-02', '2021-09-05', 100000, 
-    7, 4, 4,1
+    7, 4, 4
   ), 
   (
     8, '2021-06-17', '2021-06-18', 150000, 
-    3, 4, 1,1
+    3, 4, 1
   ), 
   (
     9, '2020-11-19', '2020-11-19', 0, 3, 
-    4, 3,1
+    4, 3
   ), 
   (
     10, '2021-04-12', '2021-04-14', 0, 
-    10, 3, 5,1
+    10, 3, 5
   ), 
   (
     11, '2021-04-25', '2021-04-25', 0, 
-    2, 2, 1,1
+    2, 2, 1
   ), 
   (
     12, '2021-05-25', '2021-05-27', 0, 
-    7, 10, 1,1
+    7, 10, 1
   );
 insert into contract_detail (
   id, contract_id, attach_facility_id, 
@@ -299,3 +300,21 @@ values
   (6, 1, 3, 1), 
   (7, 1, 2, 2), 
   (8, 12, 2, 2);
+  
+  insert into role (
+  id, name
+) 
+values (1,'admin'),(2,'user');
+  
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user1', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user2', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user3', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user4', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user5', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user6', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user7', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user8', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user9', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('user10', '2');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('admin', '1');
+INSERT INTO `md4_case_study`.`user_role` (`username`, `role_id`) VALUES ('admin', '2');

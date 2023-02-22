@@ -48,7 +48,7 @@ public class Employee {
     private Division division;
 
     @OneToOne
-    @JoinColumn(name = "username", referencedColumnName = "userName")
+    @JoinColumn(name = "username", referencedColumnName = "username")
     private User user;
 
     @OneToMany(mappedBy = "employee")

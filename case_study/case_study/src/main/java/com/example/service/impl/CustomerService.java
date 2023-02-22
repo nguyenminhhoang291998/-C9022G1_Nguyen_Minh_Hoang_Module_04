@@ -14,25 +14,42 @@ import java.util.List;
 public class CustomerService implements ICustomerService {
     @Autowired
     private ICustomerRepository customerRepository;
+
     @Override
-    public Page<Customer> search(String name,String email, int customerTypeId, Pageable pageable) {
-        if(customerTypeId==0){
-            return customerRepository.findByNameAndEmail("%"+name+"%","%"+email+"%",pageable);
+    public Page<Customer> search(String name, String email, int customerTypeId, Pageable pageable) {
+        if (customerTypeId == 0) {
+            return customerRepository.findByNameAndEmail("%" + name + "%", "%" + email + "%", pageable);
         }
-        return customerRepository.findByNameAndEmailAndCustomerTypeId("%"+name+"%","%"+email+"%", customerTypeId, pageable);
+        return customerRepository.findByNameAndEmailAndCustomerTypeId("%" + name + "%", "%" + email + "%", customerTypeId, pageable);
     }
 
     @Override
     public boolean save(Customer customer) {
-        if((customerRepository.findByEmail(customer.getEmail()) != null)
-                || (customerRepository.findByPhoneNumber(customer.getPhoneNumber())!= null) ||
-                (customerRepository.findByIdCard(customer.getIdCard())!= null)){
-            return true;
+        if (customerRepository.checkExistsSave(customer.getEmail(),
+                customer.getPhoneNumber(), customer.getIdCard()) != null) {
+            return false;
         }
+        customer.setFlag(true);
         customerRepository.save(customer);
-        return false;
+        return true;
     }
 
+    @Override
+    public boolean update(Customer customer) {
+        if (customerRepository.checkExistsUpdate(customer.getId(),customer.getEmail(),
+                customer.getPhoneNumber(), customer.getIdCard()) != null) {
+            return false;
+        }
+        customer.setFlag(true);
+        customerRepository.save(customer);
+        return true;
+    }
+
+    @Override
+    public void delete(Customer customer) {
+        customer.setFlag(false);
+        customerRepository.save(customer);
+    }
 
 
     @Override

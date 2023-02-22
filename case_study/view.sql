@@ -1,4 +1,4 @@
-use md4_case_study_furama;
+use md4_case_study;
 
 CREATE VIEW select_all_contract_dto as
 select c.id as id, f.name as facility_name, cus.name as customer_name, 

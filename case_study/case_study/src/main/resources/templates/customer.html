@@ -31,7 +31,7 @@
         <table class="table table-striped w-100" id="tableCustomer">
             <thead style="vertical-align: top; text-align: center">
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">#</th>
                 <!--                <th scope="col" class="text-center">Customer Type ID</th>-->
                 <th scope="col">Name</th>
                 <th scope="col">Day Of Birth</th>
@@ -87,7 +87,7 @@
             <a  th:href="@{/customer/(page=${customerPage.number - 1},nameSearch=${nameSearch},emailSearch=${emailSearch},
             typeIdSearch=${typeIdSearch})}" th:if="${customerPage.hasPrevious()}" class="previous">
 <!--                disable-->
-                <button class="btn btn-primary" th:attr="onchange=|infoPre('${customerPage.number}')|" id="btnPre" >&laquo;</button>
+                <button class="btn btn-primary"  id="btnPre" >&laquo;</button>
             </a>
             <span th:text="${customerPage.number + 1}"></span>/<span th:text="${customerPage.totalPages}"></span>
             <a th:href="@{/customer/(page=${customerPage.number + 1},nameSearch=${nameSearch},emailSearch=${emailSearch},
@@ -100,16 +100,18 @@
 </div>
 
 <!--Modal add-->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div th:class="${hasError == 'true' ? 'modal fade show' : 'modal fade'}"
+     th:style="${hasError == 'true' ? 'display: block' : 'display: none'}"
+     id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">Add Customer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <a th:href="@{/customer}"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
             </div>
             <div class="modal-body m-0 p-0">
 
-                <form class="form-horizontal" action="/customer/save" method="post" th:object="${ctm}">
+                <form class="form-horizontal" action="/customer/save" method="post" th:object="${customerDto}">
 
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="newCustomerTypeId">Customer Type:</label></div>
@@ -124,9 +126,8 @@
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="newName">Name:</label></div>
                         <div class="col-sm-8">
-                            <input required pattern="^[A-Z][a-z]*(\s[A-Z][a-z]*)+$" title="Tên chưa đúng định dạng"
-                                   type="text" class="form-control" id="newName" th:field="*{name}"
-                                   placeholder="Enter name">
+                            <input type="text" class="form-control" id="newName" th:field="*{name}" placeholder="Enter name">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                         </div>
                     </div>
 
@@ -152,9 +153,10 @@
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="newIdCard">ID card:</label></div>
                         <div class="col-sm-8">
-                            <input required pattern="^\d{9}(\d{3})?$" title="Số CMND chưa đúng định dạng" type="number"
-                                   class="form-control"
+                            <input type="number"  class="form-control"
                                    th:field="*{idCard}" id="newIdCard" placeholder="Enter ID card">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('idCard')}" th:errors="*{idCard}"></p>
+
                         </div>
                     </div>
 
@@ -162,20 +164,19 @@
                         <div class=" col-sm-4"><label class="control-label" for="newPhoneNumber">Phone
                             number:</label></div>
                         <div class="col-sm-8">
-                            <input required pattern="^([(]84[)][+])?09[0-1]\d{7}$"
-                                   title="Số điện thoại chưa đúng định dạng" type="number" maxlength="10" minlength="9"
-                                   class="form-control"
-                                   th:field="*{phoneNumber}" id="newPhoneNumber" placeholder="Enter phone number">
+                            <input class="form-control" th:field="*{phoneNumber}" id="newPhoneNumber" placeholder="Enter phone number">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+
                         </div>
                     </div>
 
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="newEmail">Email:</label></div>
                         <div class="col-sm-8">
-                            <input required pattern="^[a-zA-Z0-9]+@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)+$"
-                                   title="Email chưa đúng định dạng"
-                                   type="email" class="form-control" id="newEmail" th:field="*{email}"
+                            <input type="email" class="form-control" id="newEmail" th:field="*{email}"
                                    placeholder="Enter email">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+
                         </div>
                     </div>
 
@@ -198,18 +199,19 @@
 </div>
 
 <!--Modal edit-->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}"
+     id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Customer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <a th:href="@{/customer}"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
             </div>
             <div class="modal-body m-0 p-0">
-                <form class="form-horizontal" action="/customer/update" method="post" th:object="${ctm}">
+                <form class="form-horizontal" action="/customer/update" method="post" th:object="${customerDto}">
 
                     <input type="number" class="form-control" id="editId" th:field="*{id}" hidden>
-                    <span class="form-control" id="editFlag" th:field="*{flag}" hidden></span>
 
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="editCustomerTypeId">Customer Type:</label></div>
@@ -223,8 +225,9 @@
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="editName">Name:</label></div>
                         <div class="col-sm-8">
-                            <input required pattern="^[A-Z][a-z]*(\s[A-Z][a-z]*)+$" title="Tên chưa đúng định dạng"
-                                   type="text" class="form-control" id="editName" th:field="*{name}">
+                            <input type="text" class="form-control" id="editName" th:field="*{name}">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
                         </div>
                     </div>
 
@@ -248,8 +251,9 @@
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="editIdCard">ID card:</label></div>
                         <div class="col-sm-8">
-                            <input required pattern="^\d{9}(\d{3})?$" title="Số CMND chưa đúng định dạng" type="number"
-                                   minlength="9" maxlength="12" class="form-control" th:field="*{idCard}" id="editIdCard">
+                            <input class="form-control" th:field="*{idCard}" id="editIdCard">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('idCard')}" th:errors="*{idCard}"></p>
+
                         </div>
                     </div>
 
@@ -257,18 +261,17 @@
                         <div class=" col-sm-4"><label class="control-label" for="editPhoneNumber">Phone
                             number:</label></div>
                         <div class="col-sm-8">
-                            <input required pattern="^([(]84[)][+])?09[0-1]\d{7}$"
-                                   title="Số điện thoại chưa đúng định dạng" type="number" maxlength="10" minlength="9"
-                                   class="form-control" th:field="*{phoneNumber}" id="editPhoneNumber">
+                            <input  class="form-control" th:field="*{phoneNumber}" id="editPhoneNumber">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+
                         </div>
                     </div>
 
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4"><label class="control-label" for="editEmail">Email:</label></div>
                         <div class="col-sm-8">
-                            <input required pattern="^[a-zA-Z0-9]+@[a-zA-Z0-9]+([.][a-zA-Z0-9]+)+$"
-                                   title="Email chưa đúng định dạng" type="email" class="form-control" id="editEmail"
-                                   th:field="*{email}">
+                            <input type="email" class="form-control" id="editEmail" th:field="*{email}">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
                         </div>
                     </div>
 

@@ -1,6 +1,7 @@
 package com.example.dto;
 
 public interface IContractDetailDto {
+    //7.	Số lượng phải là số nguyên dương.
 
     public int getId();
 

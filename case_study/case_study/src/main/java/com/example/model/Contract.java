@@ -10,6 +10,7 @@ import java.util.Set;
 @Entity
 public class Contract {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(columnDefinition = "datetime")
@@ -24,7 +25,6 @@ public class Contract {
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
-
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
@@ -37,25 +37,22 @@ public class Contract {
     @OneToMany(mappedBy = "contract")
     private Set<ContractDetail> contractDetailSet;
 
-    private boolean flag;
-
     public Contract() {
     }
 
-//    public Contract(int id, String startDate, String endDate,
-//                    double deposit, Employee employee,
-//                    Customer customer, Facility facility,
-//                    Set<ContractDetail> contractDetailSet, boolean flag) {
-//        this.id = id;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.deposit = deposit;
-//        this.employee = employee;
-//        this.customer = customer;
-//        this.facility = facility;
-//        this.contractDetailSet = contractDetailSet;
-//        this.flag = flag;
-//    }
+    public Contract(int id, String startDate, String endDate,
+                    double deposit, Employee employee,
+                    Customer customer, Facility facility,
+                    Set<ContractDetail> contractDetailSet) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.deposit = deposit;
+        this.employee = employee;
+        this.customer = customer;
+        this.facility = facility;
+        this.contractDetailSet = contractDetailSet;
+    }
 
     public int getId() {
         return id;
@@ -121,11 +118,4 @@ public class Contract {
         this.contractDetailSet = contractDetailSet;
     }
 
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
 }

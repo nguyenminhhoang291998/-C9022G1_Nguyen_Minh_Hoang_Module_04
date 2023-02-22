@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
-@CrossOrigin()
+@CrossOrigin("*")
 @RequestMapping("api")
 public class RestController {
 
@@ -37,19 +37,19 @@ public class RestController {
 
     @PostMapping(value = "contract/save")
     public ResponseEntity save(@RequestBody List<ContractDetailDto> contractDetailDtoList) {
+        if(contractDetailDtoList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         Contract contract = new Contract();
         BeanUtils.copyProperties(contractDetailDtoList.get(0).getContractDto(), contract);
         contractService.save(contract);
         for (ContractDetailDto ct: contractDetailDtoList) {
-            Contract contrac1 = new Contract();
-            BeanUtils.copyProperties(ct.getContractDto(),contrac1);
             ContractDetail contractDetail = new ContractDetail();
             BeanUtils.copyProperties(ct,contractDetail);
-            contractDetail.setContract(contrac1);
+            contractDetail.setContract(contract);
             contractDetailService.save(contractDetail);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 }

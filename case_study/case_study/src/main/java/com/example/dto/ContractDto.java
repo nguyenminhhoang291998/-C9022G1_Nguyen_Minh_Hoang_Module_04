@@ -1,6 +1,6 @@
 package com.example.dto;
 
-import com.example.model.ContractDetail;
+
 import com.example.model.Customer;
 import com.example.model.Employee;
 import com.example.model.Facility;
@@ -12,9 +12,6 @@ import java.util.Set;
 
 
 public class ContractDto {
-
-    private int id;
-
     private String startDate;
 
     private String endDate;
@@ -28,15 +25,13 @@ public class ContractDto {
     private Facility facility;
 
 
-
     public ContractDto() {
     }
 
-    public ContractDto(int id, String startDate, String endDate,
+    public ContractDto( String startDate, String endDate,
                        double deposit, Employee employee,
                        Customer customer, Facility facility
                      ) {
-        this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.deposit = deposit;
@@ -45,13 +40,6 @@ public class ContractDto {
         this.facility = facility;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
     public String getStartDate() {
         return startDate;
     }

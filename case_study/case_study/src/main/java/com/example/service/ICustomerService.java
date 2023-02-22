@@ -11,8 +11,9 @@ public interface ICustomerService {
     Page<Customer> search(String name,String email, int customerType, Pageable pageable);
 
     boolean save(Customer customer);
+    boolean update(Customer customer);
+    void delete(Customer customer);
 
-//    void delete(int id);
 
     Customer findById(int id);
 

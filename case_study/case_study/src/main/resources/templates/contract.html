@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout :: head}">
-    <script src="../static/jquery-3.6.3.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.3.js"
-            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous"></script>
 </head>
 <body>
 <div th:replace="~{layout :: navbar}"></div>
@@ -75,8 +76,7 @@
         <div class="modal-content">
             <div class="modal-body m-0 p-0">
 
-                <form class="form-horizontal">
-                    <input id="newContractId" hidden/>
+                <form class="form-horizontal" onchange="calculateTotal()">
 
                     <div class="row form-group align-items-center m-2">
                         <div class=" col-sm-4">
@@ -108,7 +108,7 @@
                         <div class=" col-sm-4">
                             <label class="control-label" for="totalCost">Total cost:</label></div>
                         <div class="col-sm-8">
-                            <input  class="form-control" id="totalCost" readonly>
+                            <input  class="form-control bg-light" id="totalCost" readonly>
                         </div>
                     </div>
 
@@ -117,8 +117,7 @@
                             <label class="control-label">Employee:</label></div>
                         <div class="col-sm-8">
                             <select class="form-control" id="employeeId" >
-                                <option value="0" disabled>Chọn nhân viên</option>
-                                <option value="100" disabled >Chọn nhân viên</option>
+                                <option value="0" disabled selected>Chọn nhân viên</option>
                                 <option th:each="emp : ${employeeList}" th:value="${emp.id}"
                                         th:text="${emp.name}"></option>
                             </select>
@@ -130,7 +129,7 @@
                             <label class="control-label">Customers:</label></div>
                         <div class="col-sm-8">
                             <select class="form-control" id="customerId">
-                                <option value="0" disabled>Chọn khách hàng</option>
+                                <option value="0" disabled selected>Chọn khách hàng</option>
                                 <option th:each="cus : ${customerList}" th:value="${cus.id}"
                                         th:text="${cus.name}"></option>
                             </select>
@@ -142,9 +141,9 @@
                             <label class="control-label">Service:</label></div>
                         <div class="col-sm-8">
                             <select class="form-control" id="facilityId" >
-                                <option value="0" disabled>Chọn dịch vụ</option>
+                                <option value="0" disabled selected>Chọn dịch vụ</option>
                                 <option th:each="fa : ${facilityList}" th:value="${fa.id}"
-                                        th:text="${fa.name}" th:attr="onchange=|totalCost('${fa.cost}','0','0')|"></option>
+                                        th:text="${fa.name}"></option>
                             </select>
                         </div>
                     </div>
@@ -163,15 +162,15 @@
                                     <div class="row checkbox-list" >
 
                                         <div class="col-md-7 align-items-center">
-                                            <input class="form-check-input checkbox" type="checkbox" th:attr="onchange=|totalCost('0',${attachFacility.cost},'0')|"
+                                            <input class="form-check-input checkbox align-content-center" type="checkbox"
                                                   th:value="${attachFacility.id}" th:text="${attachFacility.name}">
                                         </div>
                                         <div class="col-md-2 align-items-center">
                                             <p>SL:</p>
                                         </div>
                                         <div class="col-md-3">
-                                            <input  type="number" style="width: 55px" class="form-control quantity" onchange="totalCost('0','0',this.value)"
-                                                   min="1" value="1">
+                                            <input  type="number" style="width: 55px" class="form-control quantity"
+                                                   min="1">
                                         </div>
                                     </div>
 
@@ -196,19 +195,26 @@
 
 <script>
 
-    function totalCost(facilityCost,attachFacilityCost,quantity){
-        let facilityCost1 = facilityCost;
-        let attachFacilityCost1 = attachFacilityCost;
-        let quantity1 = quantity;
-        let totalCost = facilityCost1 + attachFacilityCost1 + quantity1;
-        document.getElementById('totalCost').value = totalCost;
+    function calculateTotal(){
+        let selectedOption = document.getElementById("facilityId").value;
+        let checkboxes = document.querySelectorAll(".checkbox");
+        let quantities = document.querySelectorAll(".quantity");
+
+        // Calculate the total price
+        let total = parseFloat(selectedOption);
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                let checkbox = checkboxes[i];
+                let quantity = quantities[i].value;
+                let price = parseFloat(checkbox.value);
+                total += quantity * price;
+            }
+        }
+        document.getElementById("totalCost").value = total + " Vnđ";
     }
 
-
-
-
     function showFormAddNewContract(){
-        let id = Math.floor(Math.random() *10000);
         let startDate = $('#startDate').val();
         let endDate = $('#endDate').val();
         let deposit= $('#deposit').val();
@@ -216,7 +222,6 @@
         let customerId = $('#customerId').val();
         let employeeId = $('#employeeId').val();
         let newContractDto = {
-            id : id,
             startDate :startDate,
             endDate : endDate,
             deposit : deposit,
@@ -230,7 +235,7 @@
                 id: employeeId
             }
         }
-
+        debugger
         let checkboxes = document.querySelectorAll('.checkbox-list .checkbox');
         let quantities = document.querySelectorAll('.checkbox-list .quantity');
 
@@ -247,7 +252,7 @@
                 contractDetailDtoList.push(contractDetailDto);
             }
         }
-
+            debugger
         $.ajax({
             headers:{
                 'Accept':'application/json',
@@ -262,7 +267,6 @@
                 window.location.reload();
             },
         })
-
 
 
     }
@@ -356,8 +360,11 @@
 
     // // hiển thị list dịch vụ đi kèm của thêm hợp đồng mới
     function showListAttachFacility() {
-        document.getElementById("btnShowListAttachFacility").style.display = 'none';
-        document.getElementById("listAttachFacility").style.display = 'block';
+        if(document.getElementById("listAttachFacility").style.display == 'block'){
+            document.getElementById("listAttachFacility").style.display = 'none';
+        }else {
+            document.getElementById("listAttachFacility").style.display = 'block'
+        }
     }
 
     // hiển thị danh sách các dịch vụ đi kèm của từng hợp đồng
