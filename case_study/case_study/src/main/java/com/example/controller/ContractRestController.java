@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.ContractDetailDto;
-import com.example.dto.ContractDto;
 import com.example.dto.IContractDetailDto;
 import com.example.model.Contract;
 import com.example.model.ContractDetail;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@org.springframework.web.bind.annotation.RestController
+@RestController
 @CrossOrigin("*")
 @RequestMapping("api")
-public class RestController {
+public class ContractRestController {
 
     @Autowired
     private IContractService contractService;

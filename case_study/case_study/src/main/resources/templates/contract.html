@@ -141,9 +141,9 @@
                             <label class="control-label">Service:</label></div>
                         <div class="col-sm-8">
                             <select class="form-control" id="facilityId" >
-                                <option value="0" disabled selected>Chọn dịch vụ</option>
+                                <option value="0" disabled selected th:data-cost="0">Chọn dịch vụ</option>
                                 <option th:each="fa : ${facilityList}" th:value="${fa.id}"
-                                        th:text="${fa.name}"></option>
+                                        th:text="${fa.name}" th:data-cost="${fa.cost}"></option>
                             </select>
                         </div>
                     </div>
@@ -158,19 +158,17 @@
                             </button>
                             <div style="border: none; display:none" id="listAttachFacility" class="form-control" >
                                 <th:block  th:each="attachFacility : ${attachFacilityList}" >
-
                                     <div class="row checkbox-list" >
-
                                         <div class="col-md-7 align-items-center">
                                             <input class="form-check-input checkbox align-content-center" type="checkbox"
-                                                  th:value="${attachFacility.id}" th:text="${attachFacility.name}">
+                                                  th:value="${attachFacility.id}" th:text="${attachFacility.name}" th:data-cost="${attachFacility.cost}" >
                                         </div>
                                         <div class="col-md-2 align-items-center">
                                             <p>SL:</p>
                                         </div>
                                         <div class="col-md-3">
                                             <input  type="number" style="width: 55px" class="form-control quantity"
-                                                   min="1">
+                                                   min="1" value="1">
                                         </div>
                                     </div>
 
@@ -196,18 +194,18 @@
 <script>
 
     function calculateTotal(){
-        let selectedOption = document.getElementById("facilityId").value;
+        let selectedOption = parseFloat($("#facilityId option:selected").data("cost"));
         let checkboxes = document.querySelectorAll(".checkbox");
         let quantities = document.querySelectorAll(".quantity");
 
         // Calculate the total price
-        let total = parseFloat(selectedOption);
+        let total = selectedOption;
 
         for (let i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
-                let checkbox = checkboxes[i];
-                let quantity = quantities[i].value;
-                let price = parseFloat(checkbox.value);
+                let checkbox = checkboxes[i].dataset.cost;
+                let quantity = parseInt(quantities[i].value);
+                let price = parseFloat(checkbox);
                 total += quantity * price;
             }
         }

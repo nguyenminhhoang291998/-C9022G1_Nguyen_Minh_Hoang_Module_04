@@ -33,8 +33,8 @@ public class Customer {
     @NotNull
     @Column(columnDefinition = "varchar(45)",unique = true)
     private String phoneNumber;
-    @NotNull
 
+    @NotNull
     @Column(columnDefinition = "varchar(45)",unique = true)
     private String email;
 
