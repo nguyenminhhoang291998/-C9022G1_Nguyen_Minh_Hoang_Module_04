@@ -95,7 +95,9 @@ VALUES
     '755434343', '8000000', '0988767111', 
     'nguyencongdao12@gmail.com', '6 Hoà Khánh, Đà Nẵng', 
     2, 3, 2, 'user10',1
-  );
+  ),
+   (id ,`address`, `day_of_birth`, `email`, `flag`, `id_card`, `name`, `phone_number`, `salary`, `division_id`, `education_degree_id`, `position_id`, `username`) VALUES (11, '173 Bình Kỳ, Đà Nẵng', '1998-09-02', 'nguyenminhhoang@gmail.com', 1, 201736769, 'Nguyễn Minh Hoàng', 0782125725, 50000000, 4, 3, 6, 'admin');
+
 INSERT INTO customer_type (id, name) 
 values 
   (1, 'Diamond'), 

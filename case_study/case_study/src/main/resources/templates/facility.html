@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{layout :: head}">
 </head>
 <body>
@@ -15,7 +15,7 @@
                     <select type="number"  class="form-control"  style="margin-left: 1%;width: 140%" name="typeIdSearch">
                         <option th:each="facilityType : ${facilityTypeList}" th:value="${facilityType.id}"
                                 th:text="${facilityType.name}" th:if="${typeIdSearch == facilityType.id }"></option>
-                        <option value="0">Customer Type</option>
+                        <option value="0">Facility Type</option>
                         <option th:each="facilityType : ${facilityTypeList}" th:value="${facilityType.id}"
                                 th:text="${facilityType.name}" th:if="${typeIdSearch != facilityType.id }"></option>
                     </select>
@@ -56,7 +56,7 @@
                 <button th:attr="onclick=|getEditInfo('${facility.id}','${facility.name}','${facility.area}',
                             '${facility.cost}','${facility.maxPeople}','${facility.rentType.id}','${facility.facilityType.id}',
                             '${facility.standardRoom}','${facility.descriptionOtherConvenience}','${facility.poolArea}','${facility.numberOfFloors}',
-                            '${facility.facilityFree}','${facility.flag}')|" type="button" class="btn btn-primary"
+                            '${facility.facilityFree}')|" type="button" class="btn btn-primary"
                         data-bs-toggle="modal"
                         data-bs-target="#editFacilityModal">Edit
                 </button>
@@ -64,7 +64,7 @@
 
             <td>
                 <button th:attr="onclick=|getDeleteInfo('${facility.id}','${facility.name}')|" type="button"
-                        class="btn btn-danger" data-bs-toggle="modal"
+                        class="btn btn-danger" data-bs-toggle="modal" sec:authorize="hasRole('ROLE_ADMIN')"
                         data-bs-target="#deleteFacilityModal">Delete
                 </button>
             </td>
@@ -77,7 +77,7 @@
     <div class="row">
         <div class="col-md-9">
             <button type="button"
-                    class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
+                    class="btn btn-success" onclick="showFormAddNewFacility()" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
                 Add new Facility
             </button>
         </div>
@@ -102,10 +102,12 @@
 </div>
 
 <!--modal edit-->
-<div class="modal fade" id="editFacilityModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}"
+     id="editFacilityModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" action="/facility/update" th:object="${fcl}" method="post">
+            <form class="form-horizontal" action="/facility/update" th:object="${facilityDto}" method="post">
                 <div class="modal-header justify-content-center m-2 p-0">
                     <h3 class="text-center text-primary">Edit Facility</h3>
                 </div>
@@ -113,12 +115,14 @@
                 <div class="modal-body">
 
                     <input hidden class="form-control" th:field="*{id}" id="idEdit">
-                    <input hidden class="form-control" th:field="*{flag}" id="flagEdit">
+<!--                    <input hidden class="form-control" th:field="*{flag}" id="flagEdit">-->
 
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Facility Name</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="nameEdit" th:field="*{name}">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
                         </div>
                     </div>
 
@@ -132,8 +136,8 @@
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Cost</label>
                         <div class="col-sm-8">
-                            <input required pattern="^\d*([.]\d+)?$" title="Giá phải là số dương" type="number"
-                                   class="form-control" id="costEdit" th:field="*{cost}">
+                            <input class="form-control" id="costEdit" type="text" th:field="*{cost}">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></p>
                         </div>
                     </div>
 
@@ -147,7 +151,7 @@
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Rent Type Name</label>
                         <div class="col-sm-8">
-                            <select type="number" class="form-control" id="rentTypeEdit" th:field="*{rentType.id}" >
+                            <select type="number" readonly class="form-control" id="rentTypeEdit" th:field="*{rentType.id}" >
                                 <option th:each="rentType : ${facilityRentTypeList}" th:value="${rentType.id}" th:text="${rentType.name}"></option>
                             </select>
                         </div>
@@ -159,7 +163,6 @@
                               <select type="number" class="form-control" id="facilityTypeIdEdit" th:field="*{facilityType.id}" >
                                 <option th:each="facilityType : ${facilityTypeList}" th:value="${facilityType.id}" th:text="${facilityType.name}"></option>
                             </select>
-
                         </div>
                     </div>
 
@@ -195,9 +198,10 @@
                         <div class="m-2 row align-items-center">
                             <label class="col-sm-4 col-form-label">Number Of Floors</label>
                             <div class="col-sm-8">
-                                <input required pattern="^[1-9]\d*$" title="Số tầng phải là số nguyên dương"
-                                       type="number" class="form-control" id="numberOfFloorsEdit"
+                                <input type="number" class="form-control" id="numberOfFloorsEdit"
                                        th:field="*{numberOfFloors}">
+                                <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('numberOfFloors')}" th:errors="*{numberOfFloors}"></p>
+
                             </div>
                         </div>
                     </div>
@@ -214,7 +218,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a th:href="@{/facility}"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button></a>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
@@ -223,13 +227,15 @@
 </div>
 
 <!--modal add-->
-<div class="modal fade" id="addFacilityModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div th:class="${hasError == 'true' ? 'modal fade show' : 'modal fade'}"
+     th:style="${hasError == 'true' ? 'display: block' : 'display: none'}"
+     id="addFacilityModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-center m-2 p-0">
                 <h3 class="text-center text-primary">Facility</h3>
             </div>
-            <form class="form-horizontal" action="/facility/save" method="post" th:object="${fcl}">
+            <form class="form-horizontal" action="/facility/save" method="post" th:object="${facilityDto}">
                 <div class="modal-body px-2 py-0">
                     <div class="m-2 row">
                         <label class="col-sm-4 form-label">Facility Type</label>
@@ -246,8 +252,9 @@
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Facility Name</label>
                         <div class="col-sm-8">
-                            <input required pattern="^[A-Z][a-z0-9\s]*$" title="Tên chưa đúng định dạng" type="text"
-                                   class="form-control" id="name" th:field="*{name}">
+                            <input type="text" class="form-control" id="name" th:field="*{name}">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
                         </div>
                     </div>
 
@@ -261,8 +268,9 @@
                     <div class="m-2 row">
                         <label class="col-sm-4 col-form-label">Cost</label>
                         <div class="col-sm-8">
-                            <input required pattern="^\d*([.]\d+)?$" title="Tiền phải là số dương" type="number"
-                                   class="form-control" id="cost" th:field="*{cost}">
+                            <input  class="form-control" id="cost" th:field="*{cost}">
+                            <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></p>
+
                         </div>
                     </div>
 
@@ -313,8 +321,9 @@
                         <div class="m-2 row align-items-center">
                             <label class="col-sm-4 col-form-label">Number Of Floors</label>
                             <div class="col-sm-8">
-                                <input required pattern="^[1-9]\d*$" title="Số tầng phải là số nguyên dương"
-                                       type="number" class="form-control" th:field="*{numberOfFloors}">
+                                <input type="number" class="form-control" th:field="*{numberOfFloors}">
+                                <p class="form-control border-0 text-danger" th:if="${#fields.hasErrors('numberOfFloors')}" th:errors="*{numberOfFloors}"></p>
+
                             </div>
                         </div>
                     </div>
@@ -330,7 +339,7 @@
                 </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a th:href="@{/facility}"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button></a>
                 <button type="submit" class="btn btn-primary">Add</button>
             </div>
             </form>
@@ -427,6 +436,10 @@
     function getDeleteInfo(id, name) {
         document.getElementById("deleteId").value = id;
         document.getElementById("deleteName").innerText = name;
+    }
+    // set facilityTypeId mặc định khi mở thêm mới facility
+    function showFormAddNewFacility(){
+        document.getElementById("facilityTypeId").value = 1;
     }
 </script>
 <script th:src="@{/bootstrap-5.3.0-alpha1-dist/js/bootstrap.js}"></script>

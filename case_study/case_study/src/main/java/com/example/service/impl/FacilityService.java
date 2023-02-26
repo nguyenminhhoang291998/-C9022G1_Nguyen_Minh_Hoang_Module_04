@@ -28,9 +28,31 @@ public class FacilityService implements IFacilityService {
     }
 
     @Override
-    public void save(Facility facility) {
+    public boolean save(Facility facility) {
+        if(facilityRepository.checkExistsSave(facility.getName())!=null){
+            return false;
+        }
+        facility.setFlag(true);
+        facilityRepository.save(facility);
+        return true;
+    }
+
+    @Override
+    public boolean update(Facility facility) {
+        if(facilityRepository.checkExistsUpdate(facility.getId(), facility.getName())!=null){
+            return false;
+        }
+        facility.setFlag(true);
+        facilityRepository.save(facility);
+        return true;
+    }
+
+    @Override
+    public void delete(Facility facility) {
+        facility.setFlag(false);
         facilityRepository.save(facility);
     }
+
 
     @Override
     public Facility findById(int id) {

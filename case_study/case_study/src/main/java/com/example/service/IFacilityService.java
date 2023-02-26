@@ -10,7 +10,9 @@ public interface IFacilityService {
     Page<Facility> search(String name, int facilityType, Pageable pageable);
     List<Facility> findAll();
 
-    void save(Facility facility);
+    boolean save(Facility facility);
+    boolean update(Facility facility);
+    void delete(Facility facility);
 
     Facility findById(int id);
 }

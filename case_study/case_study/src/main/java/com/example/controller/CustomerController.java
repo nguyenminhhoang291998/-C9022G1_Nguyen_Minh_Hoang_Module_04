@@ -33,7 +33,7 @@ public class CustomerController {
                                     @RequestParam(required = false, defaultValue = "") String emailSearch,
                                     @RequestParam(required = false, defaultValue = "0") int typeIdSearch,
                                     @RequestParam(required = false, defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 2);
+        Pageable pageable = PageRequest.of(page, 3);
         Page<Customer> customerPage = customerService.search(nameSearch, emailSearch, typeIdSearch, pageable);
         if (customerPage.isEmpty()) {
             model.addAttribute("mess", "Danh sách trống");
@@ -43,19 +43,29 @@ public class CustomerController {
         model.addAttribute("nameSearch", nameSearch);
         model.addAttribute("emailSearch", emailSearch);
         model.addAttribute("typeIdSearch", typeIdSearch);
-        model.addAttribute("customerDto", new CustomerDto());
+        if(model.getAttribute("customerDto")!= null){
+            model.addAttribute("customerDto",model.getAttribute("customerDto"));
+            model.addAttribute("hasError", "true");
+        }else {
+            model.addAttribute("customerDto", new CustomerDto());
+            model.addAttribute("hasError", "false");
+        }
         return "customer";
     }
 
     @RequestMapping("save")
     public String save(@Valid @ModelAttribute CustomerDto customerDto, BindingResult bindingResult,
-                       Model model, RedirectAttributes redirect) {
+                        RedirectAttributes redirect, @RequestParam(required = false, defaultValue = "") String nameSearch,
+                       @RequestParam(required = false, defaultValue = "") String emailSearch,
+                       @RequestParam(required = false, defaultValue = "0") int typeIdSearch,
+                       @RequestParam(required = false, defaultValue = "0") int page) {
+        new CustomerDto().validate(customerDto,bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("customerPage", customerService.search("", "", 0, PageRequest.of(0, 2)));
-            model.addAttribute("customerDto", customerDto);
-            model.addAttribute("customerTypeList", customerTypeService.findAll());
-            model.addAttribute("hasError", "true");
-            return "customer";
+//            model.addAttribute("customerPage", customerService.search("", "", 0, PageRequest.of(0, 2)));
+//            model.addAttribute("customerTypeList", customerTypeService.findAll());
+            redirect.addFlashAttribute("customerDto", customerDto);
+            redirect.addFlashAttribute("org.springframework.validation.BindingResult.customerDto",bindingResult);
+            return "redirect:/customer";
         }
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDto, customer);
@@ -75,6 +85,7 @@ public class CustomerController {
     @RequestMapping("update")
     public String update(@Valid @ModelAttribute CustomerDto customerDto, BindingResult bindingResult,
                          Model model, RedirectAttributes redirect) {
+        new CustomerDto().validate(customerDto,bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("customerPage", customerService.search("", "", 0, PageRequest.of(0, 2)));
             model.addAttribute("customerDto", customerDto);

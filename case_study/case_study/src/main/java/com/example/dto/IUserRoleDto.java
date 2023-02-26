@@ -1,6 +1,8 @@
 package com.example.dto;
 
+import java.util.List;
+
 public interface IUserRoleDto {
 
-    int getRoleId();
+    int getRole_id();
 }

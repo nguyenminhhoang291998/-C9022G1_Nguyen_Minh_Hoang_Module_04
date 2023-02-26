@@ -19,4 +19,10 @@ public interface IFacilityRepository extends JpaRepository<Facility,Integer> {
     @Query(value = "select * from facility where flag = true",nativeQuery = true)
     List<Facility> findAll();
 
+    @Query(value = "select * from facility where  name = :name  and flag = true limit 1", nativeQuery = true)
+    Facility checkExistsSave(@Param("name") String name);
+
+    @Query(value = "select * from facility where  name = :name  and flag = true and id <> :id limit 1", nativeQuery = true)
+    Facility checkExistsUpdate(@Param("id") int id, @Param("name") String name);
+
 }

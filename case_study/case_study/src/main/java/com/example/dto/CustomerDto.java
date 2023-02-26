@@ -1,10 +1,18 @@
 package com.example.dto;
 
 import com.example.model.CustomerType;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
-public class CustomerDto {
+public class CustomerDto implements Validator {
     private int id;
 
     private CustomerType customerType;
@@ -110,5 +118,26 @@ public class CustomerDto {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        CustomerDto customerDto = (CustomerDto) target;
+        if(customerDto.getDayOfBirth().isEmpty()){
+            errors.rejectValue("dayOfBirth","DateOfBirthError1");
+            return;
+        }
+        String dateOfBirth = customerDto.getDayOfBirth();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(dateOfBirth, dateTimeFormatter);
+        LocalDate currentDate = LocalDate.now();
+        if (date.isAfter(currentDate)) {
+            errors.rejectValue("dayOfBirth","DateOfBirthError2");
+        }
     }
 }

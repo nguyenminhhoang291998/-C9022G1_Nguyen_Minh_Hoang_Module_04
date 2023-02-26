@@ -4,14 +4,19 @@ package com.example.dto;
 import com.example.model.Customer;
 import com.example.model.Employee;
 import com.example.model.Facility;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Set;
 
 
-public class ContractDto {
+public class ContractDto implements Validator {
     private String startDate;
 
     private String endDate;
@@ -88,4 +93,28 @@ public class ContractDto {
         this.facility = facility;
     }
 
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        ContractDto contractDto = (ContractDto) target;
+        if (contractDto.getStartDate().isEmpty() || contractDto.getEndDate().isEmpty()) {
+            if (contractDto.getStartDate().isEmpty()) {
+                errors.rejectValue("startDate", "dateEmptyError");
+            }
+            if (contractDto.getEndDate().isEmpty()) {
+                errors.rejectValue("endDate", "dateEmptyError");
+            }
+            return;
+        }
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(contractDto.getStartDate(), dateTimeFormatter);
+        LocalDate endDate = LocalDate.parse(contractDto.getEndDate(), dateTimeFormatter);
+        if (startDate.isAfter(endDate)) {
+            errors.reject("dateError");
+        }
+    }
 }
